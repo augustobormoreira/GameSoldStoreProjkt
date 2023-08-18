@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,12 +39,16 @@ public class UserController {
 
     @PostMapping("/addClient")
     public ResponseEntity<Client> addNewClient(@RequestBody Client client){
+        String password = new BCryptPasswordEncoder().encode(client.getPassword());
+        client.setPassword(password);
         Client newClient = (Client) this.userService.addUser(client);
         return new ResponseEntity<>(newClient, HttpStatus.OK);
     }
 
     @PostMapping("/addEmployee")
     public ResponseEntity<Employee> addNewEmployee(@RequestBody Employee employee){
+        String password = new BCryptPasswordEncoder().encode(employee.getPassword());
+        employee.setPassword(password);
         Employee newEmployee = (Employee) this.userService.addUser(employee);
         return new ResponseEntity<>(newEmployee, HttpStatus.OK);
     }
