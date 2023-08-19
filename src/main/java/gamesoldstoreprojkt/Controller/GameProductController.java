@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +39,16 @@ public class GameProductController {
     public ResponseEntity<Optional<GameProduct>> getProductById(@PathVariable("id") Long id){
         Optional<GameProduct> newProduct = this.productService.getProductById(id);
         return new ResponseEntity<>(newProduct, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateProduct")
+    public ResponseEntity<GameProduct> updateProductById(@RequestBody GameProduct gameProduct) throws Exception{
+        if(this.productService.getProductById(gameProduct.getProductId()) != null) {
+            GameProduct newProduct = this.productService.addProduct(gameProduct);
+            return new ResponseEntity<>(newProduct, HttpStatus.OK);
+        }else{
+            throw new Exception();
+        }
     }
     
 }

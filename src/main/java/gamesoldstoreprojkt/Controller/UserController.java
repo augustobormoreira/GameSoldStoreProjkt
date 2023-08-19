@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,6 +58,26 @@ public class UserController {
     public ResponseEntity<Optional<User>> findUserByCpf(@PathVariable("cpf") String identificationNumber){
         Optional<User> newUser = this.userService.findUserById(identificationNumber);
         return new ResponseEntity<>(newUser, HttpStatus.OK); 
+    }
+
+    @PutMapping("/updateClient")
+    public ResponseEntity<Client> updateClientByCpf(@RequestBody Client updatedClient) throws Exception{
+        if(this.userService.findClientById(updatedClient.getIdentificationNumber()) != null){
+            Client newClient = (Client) this.userService.addUser(updatedClient);
+            return new ResponseEntity<>(newClient, HttpStatus.OK);
+        } else{
+            throw new Exception();
+        }
+    }
+
+    @PutMapping("/updateEmployee")
+    public ResponseEntity<Employee> updateEmployeeByCpf(@RequestBody Employee updatedEmployee) throws Exception{
+        if(this.userService.findEmployeeById(updatedEmployee.getIdentificationNumber()) != null){
+            Employee newEmployee = (Employee) this.userService.addUser(updatedEmployee);
+            return new ResponseEntity<>(newEmployee, HttpStatus.OK);
+        } else{
+            throw new Exception();
+        }
     }
 
 }

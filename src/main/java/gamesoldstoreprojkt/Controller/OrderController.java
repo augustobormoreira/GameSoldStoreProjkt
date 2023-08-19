@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -42,6 +43,16 @@ public class OrderController {
     public ResponseEntity<Optional<Order>> getOrderById(@PathVariable("id") Long id){
         Optional<Order> newOrder = this.orderService.findOrderById(id);
         return new ResponseEntity<>(newOrder, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateOrder")
+    public ResponseEntity<Order> updateOrderById(@RequestBody Order order) throws Exception{
+        if(this.orderService.findOrderById(order.getOrderId()) != null) {
+            Order newOrder = this.orderService.createOrder(order);
+            return new ResponseEntity<Order>(newOrder, HttpStatus.OK);
+        }else{
+            throw new Exception();
+        }
     }
 
     

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gamesoldstoreprojkt.Model.AuthenticationDTO;
+import gamesoldstoreprojkt.Model.LoginResponseDTO;
+import gamesoldstoreprojkt.Model.User;
+import gamesoldstoreprojkt.service.TokenService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.var;
@@ -20,12 +23,15 @@ import lombok.var;
 public class AuthenticationController {
     
     private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO authData){
         var usernamePassword = new UsernamePasswordAuthenticationToken(authData.username(), authData.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 }

@@ -10,5 +10,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @DiscriminatorValue("Employee")
-public class Employee extends User {  
+public class Employee extends User { 
+    private String jobRole; 
+    private String salary;
 }

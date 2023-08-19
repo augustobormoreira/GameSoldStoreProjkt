@@ -3,6 +3,7 @@ package gamesoldstoreprojkt.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import gamesoldstoreprojkt.Model.Client;
@@ -20,6 +21,14 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
+    public Optional<Employee> findEmployeeById(String cpf){
+        return this.userRepository.findEmployeeByCpf(cpf);
+    }
+
+    public Optional<Client> findClientById(String cpf){
+        return this.userRepository.findClientByCpf(cpf);
+    }
+
     public List<Client> findAllClients(){
         return this.userRepository.findAllClient();
     }
@@ -32,5 +41,8 @@ public class UserService {
         return this.userRepository.findById(id);
     }
 
+    public UserDetails findByusername(String username){
+        return this.userRepository.findByusername(username);
+    }
     
 }

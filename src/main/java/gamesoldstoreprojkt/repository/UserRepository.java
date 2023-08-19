@@ -1,6 +1,7 @@
 package gamesoldstoreprojkt.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,11 +19,11 @@ public interface UserRepository extends JpaRepository<User, String>  {
     List<Client> findAllClient();
 
     @Query("from Client")
-    User findClientByCpf();
+    Optional<Client> findClientByCpf(String cpf);
 
     @Query("from Employee")
     List<Employee> findAllEmployee();
 
-    @Query("from Client")
-    User findEmployeeByCpf();
+    @Query("from Employee")
+    Optional<Employee> findEmployeeByCpf(String cpf);
 }
