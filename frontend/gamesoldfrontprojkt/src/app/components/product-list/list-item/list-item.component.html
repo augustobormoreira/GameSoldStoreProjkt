@@ -1,0 +1,10 @@
+<div class="card width-card mb-2">
+    <img [src]="game.productIconImgUrl" class="card-img-top custom-size" alt="...">
+    <div class="card-body">
+      <h6 class="card-title">{{game.productName}}</h6>
+       <p class="card-text">{{game.productPrice | currency:'USD' }}</p>
+    </div>
+    <div class="btn-group">
+        <button class="btn btn-sm btn-primary" (click)="addItemToCart(game)" >Adicionar ao Carrinho</button>
+    </div>
+</div>

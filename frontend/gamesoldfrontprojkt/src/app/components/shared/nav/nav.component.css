@@ -1,0 +1,18 @@
+.custom-bg-color {
+    background-color: #001524;
+    width: 100%;
+}
+
+.centerIcon {
+   margin-left: auto;
+   margin-right: auto;
+   display: block; 
+}
+
+.custom-font-30-size {
+    font-size: 30px;
+}
+
+.custom-font-10-size {
+    font-size: 10px;
+}

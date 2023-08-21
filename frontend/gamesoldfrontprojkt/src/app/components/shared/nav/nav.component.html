@@ -1,0 +1,19 @@
+<nav class="navbar custom-bg-color">
+    <div class="container-fluid">
+        <div class="col-sm-7 ">
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Digite para buscar" aria-label="Search">
+                <button class="btn btn-light" type="submit">
+                  <mat-icon class="centerIcon" aria-hidden="false" aria-label="Example home icon" fontIcon="search"></mat-icon>
+                </button>
+              </form>
+        </div>
+        <div id="button_encasing" class="col-sm-5 d-flex flex-row-reverse">
+            <button class="btn btn-light me-2" routerLink="/user-login" routerLinkActive="activate">Entrar</button>
+            <button class="btn btn-primary" routerLink="/cart">
+              <fa-icon [icon]="faCartPlus" class="fa-1x"></fa-icon>
+              <div class="badge bg-danger custom-font-10-size">{{totalCartItems}}</div>
+            </button>         
+        </div>
+      </div>
+  </nav>
