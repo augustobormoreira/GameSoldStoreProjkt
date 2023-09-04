@@ -48,6 +48,7 @@ public class UserController {
 
     @PostMapping("/addEmployee")
     public ResponseEntity<Employee> addNewEmployee(@RequestBody Employee employee){
+        System.out.println("ESTE É O FUNCIONARIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO " + employee.getName());
         String password = new BCryptPasswordEncoder().encode(employee.getPassword());
         employee.setPassword(password);
         Employee newEmployee = (Employee) this.userService.addUser(employee);

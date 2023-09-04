@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,7 @@ import lombok.AllArgsConstructor;
 public class GameProductController {
     private final GameProductService productService;
 
-    @PostMapping
+    @PostMapping("/addProduct")
     public ResponseEntity<GameProduct> createNewProduct(@RequestBody GameProduct product){
         GameProduct newProduct = this.productService.addProduct(product);
         return new ResponseEntity<>(newProduct, HttpStatus.OK);
@@ -46,6 +47,18 @@ public class GameProductController {
         if(this.productService.getProductById(gameProduct.getProductId()) != null) {
             GameProduct newProduct = this.productService.addProduct(gameProduct);
             return new ResponseEntity<>(newProduct, HttpStatus.OK);
+        }else{
+            throw new Exception();
+        }
+    }
+
+    @DeleteMapping("/removeProduct/{id}")
+    public ResponseEntity<GameProduct> deleteProductById(@PathVariable("id") Long id) throws Exception{
+        GameProduct newGameProduct = this.productService.removeProductById(
+            this.productService.getProductById(id).get()
+        );
+        if(newGameProduct!=null){
+            return new ResponseEntity<GameProduct>(newGameProduct, HttpStatus.OK);
         }else{
             throw new Exception();
         }

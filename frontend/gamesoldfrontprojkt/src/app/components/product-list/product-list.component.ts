@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Game } from '../model/game/Game';
+import { Game } from '../model/Game';
 import { GameService } from 'src/app/service/game.service';
+import { SearchGameService } from 'src/app/service/searchGame.service';
 
 @Component({
   selector: 'app-product-list',
@@ -9,26 +10,34 @@ import { GameService } from 'src/app/service/game.service';
 })
 export class ProductListComponent implements OnInit {
   nameToBeSearched: String;
+  gameIsFound: boolean = false;
   games: Array<Game> = [];
   
-  constructor(private gameService: GameService) {
+  constructor(private gameService: GameService, private searchGameService: SearchGameService) {
     this.nameToBeSearched = "";
    }
 
   ngOnInit(): void {
-    if(localStorage.getItem('sessionToken')!=null){
+    if(sessionStorage.getItem('sessionToken')!=null){
       this.retrieveAllGames();
     }
+    this.searchGameService.userTriggerSearchEvent.subscribe((data: string) => {
+      if(data == ""){
+        this.retrieveAllGames();
+      }else{
+        this.retrieveNamedGame(data);
+      }
+      
+    })
   }
 
-  retrieveNamedGame(gameToBeSearched: HTMLInputElement){
-    let tempArrayofGames: Array<Game> = []
+  retrieveNamedGame(gameToBeSearched: String){
+    let tempArrayofGames: Array<Game> = [];
     for(let game of this.games){
-      if(game.productName.toLocaleLowerCase().indexOf(gameToBeSearched.value.toLocaleLowerCase()) >= 0){
+      if(game.productName.toLocaleLowerCase().indexOf(gameToBeSearched.toLocaleLowerCase()) >= 0){
         tempArrayofGames.push(game);
       }
     }
-
     this.games = tempArrayofGames;
   }
 

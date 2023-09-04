@@ -26,6 +26,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("gamesoldprojkt")
                     .withSubject(user.getUsername())
+                    .withClaim("role", user.getRole().toString())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
             return token;

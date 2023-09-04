@@ -25,4 +25,12 @@ public class GameProductService {
     public Optional<GameProduct> getProductById(Long id){
         return this.gameProductRepository.findById(id);
     }
+
+    public GameProduct removeProductById(GameProduct product){
+        if(getProductById(product.getProductId()).get() != null){
+            this.gameProductRepository.delete(product);
+            return product;
+        }
+        return null;
+    }
 }

@@ -1,0 +1,46 @@
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Adicionar produto</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+    <form #product="ngForm" (ngSubmit)="onSubmit($event)" >
+	<div class="modal-body">
+		<div class="container-fluid">
+            <div class="row">
+                <div class="col col-lg-12">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Nome</span>
+                        <input type="text" ngModel class="form-control" placeholder="Nome do jogo" aria-label="Username" name="productName" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Descrição</span>
+                        <input type="text" ngModel class="form-control" placeholder="Descrição do jogo" aria-label="game-description" name="productDescription" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Preço</span>
+                        <input type="text" ngModel class="form-control" placeholder="Preço do jogo" aria-label="product-price" name="productPrice" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Categorias</span>
+                        <input type="text" ngModel class="form-control" placeholder="Categorias do jogo" aria-label="product-categories" name="productCategories" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Url</span>
+                        <input type="text" ngModel class="form-control" placeholder="Url" aria-label="product-image-url" name="productImageUrl" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Url Ícone</span>
+                        <input type="text" ngModel class="form-control" placeholder="Url" aria-label="product-icon-image-url" name="productIconImageUrl" aria-describedby="basic-addon1">
+                    </div>
+
+                </div>
+            </div>
+
+          </div>
+	</div>
+    
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-outline-dark" (click)="modal.close('Save click')">Adicionar</button>
+	</div>
+    </form>
+</ng-template>

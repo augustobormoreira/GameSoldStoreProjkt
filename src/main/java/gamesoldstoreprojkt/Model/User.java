@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -25,7 +27,9 @@ import lombok.NoArgsConstructor;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "user_type")
 public class User implements UserDetails {
     @Id
-    private String identificationNumber;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long identificationNumber;
+
     private String name;
     private String streetNumber;
     private String houseNumber;

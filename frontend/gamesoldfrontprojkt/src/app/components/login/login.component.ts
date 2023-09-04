@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { LoginService } from 'src/app/service/login.service';
 import { FormGroup, FormBuilder, FormControl, AbstractControl, Validators } from '@angular/forms';
-import { UserDTO } from '../model/game/UserDTO';
+import { UserDTO } from '../model/UserDTO';
 import { Router } from '@angular/router';
 
 @Component({
@@ -44,15 +44,21 @@ export class LoginComponent implements OnInit {
 
     this.userRequest = new UserDTO(this.login, this.password);
 
-    console.log(this.loginService.loginUser(this.userRequest).subscribe((res: any) => {
+    this.loginService.loginUser(this.userRequest).subscribe((res: any) => {
+      sessionStorage.setItem('sessionToken', res.token);
+      console.log(typeof (localStorage.getItem('sessionToken')));
+      this.route.navigateByUrl('/product-list');
+    })
+
+    /*console.log(this.loginService.loginUser(this.userRequest).subscribe((res: any) => {
       localStorage.setItem('sessionToken', res.token);
       this.route.navigateByUrl('/product-list');
-    }));
+    }));*/
 
   }
 
   verifyIfUserisAlreadyLoggedIn(): boolean{
-    if(localStorage.getItem('sessionToken') == null) return false;
+    if(sessionStorage.getItem('sessionToken') == null) return false;
 
     return true;
   }

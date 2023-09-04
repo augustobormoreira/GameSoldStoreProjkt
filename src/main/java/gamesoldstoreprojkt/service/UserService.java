@@ -21,12 +21,12 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    public Optional<Employee> findEmployeeById(String cpf){
-        return this.userRepository.findEmployeeByCpf(cpf);
+    public Optional<Employee> findEmployeeById(Long id){
+        return this.userRepository.findEmployeeById(id);
     }
 
-    public Optional<Client> findClientById(String cpf){
-        return this.userRepository.findClientByCpf(cpf);
+    public Optional<Client> findClientById(Long id){
+        return this.userRepository.findClientById(id);
     }
 
     public List<Client> findAllClients(){

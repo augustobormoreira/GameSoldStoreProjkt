@@ -19,11 +19,11 @@ public interface UserRepository extends JpaRepository<User, String>  {
     List<Client> findAllClient();
 
     @Query("from Client")
-    Optional<Client> findClientByCpf(String cpf);
+    Optional<Client> findClientById(Long id);
 
     @Query("from Employee")
     List<Employee> findAllEmployee();
 
     @Query("from Employee")
-    Optional<Employee> findEmployeeByCpf(String cpf);
+    Optional<Employee> findEmployeeById(Long id);
 }

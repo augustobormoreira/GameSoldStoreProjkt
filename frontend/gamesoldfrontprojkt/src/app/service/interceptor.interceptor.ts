@@ -13,8 +13,8 @@ export class InterceptorInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if(localStorage.getItem('sessionToken')!=null){
-        const sessionToken = localStorage.getItem('sessionToken');
+    if(sessionStorage.getItem('sessionToken')!=null){
+        const sessionToken = sessionStorage.getItem('sessionToken');
         const authReq = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + sessionToken)});
         console.log(authReq);
         return next.handle(authReq);

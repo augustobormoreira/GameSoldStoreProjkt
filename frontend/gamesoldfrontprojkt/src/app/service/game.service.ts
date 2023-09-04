@@ -2,10 +2,12 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { Game } from "../components/model/game/Game";
+import { Game } from "../components/model/Game";
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GameService {
     private productUrl: string = `${environment.API_URL}/games/all`;
     constructor(private httpClient: HttpClient){}

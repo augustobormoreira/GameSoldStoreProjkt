@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Game } from '../components/model/game/Game';
+import { Game } from '../components/model/Game';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartserviceService {
   public myCart: any = [];
+  isRemoved: boolean = false;
   public productList = new BehaviorSubject<any>([]);
 
   getProductList(){
@@ -35,8 +36,9 @@ export class CartserviceService {
 
   removeCartItem(product: Game){
     this.myCart.map((cartItem: any, index:any) => {
-      if(product.productName.localeCompare(cartItem.productName) == 0){
+      if(product.productName.localeCompare(cartItem.productName) == 0 && !this.isRemoved){
         this.myCart.splice(index, 1);
+        this.isRemoved = true;
       }
     })
   }
@@ -45,6 +47,8 @@ export class CartserviceService {
     this.myCart = [];
     this.productList.next(this.myCart);
   }
+
+  
 
   constructor() { }
 }
