@@ -2,7 +2,7 @@
 <div class="mat-dialog-content inheritWidthSize">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Adicionar Usuario</h4>
-		<button type="button" class="btn-close" aria-label="Close" ></button>
+		<button type="button" class="btn-close" aria-label="Close" (click)="closeDialog()"></button>
   </div>
   <div #userProperties class="modal-body">
     <form [formGroup]="userForm" (ngSubmit)="addNewUser()" >
@@ -45,12 +45,18 @@
         <!--Special values to CLIENT ROLE-->
 
         <mat-form-field *ngIf="isClient()">
-          <mat-label>Método preferido de pagamento:</mat-label>
-          <input ngModel class="form-control" formControlName="preferredPaymentMethod" matInput>
-        </mat-form-field >
+          <mat-label>Metodo de Pagamento</mat-label>
+          <mat-select formControlName="preferredPaymentMethod">
+            <mat-option value="credito" >Credito</mat-option>
+            <mat-option value="debito" >Debito</mat-option>
+          </mat-select>
+        </mat-form-field>
         <mat-form-field *ngIf="isClient()">
           <mat-label>Permissao para executar compras:</mat-label>
-          <input ngModel class="form-control" formControlName="clientIsBlacklisted" matInput>
+          <mat-select formControlName="clientIsBlacklisted">
+            <mat-option value="true" >Sim</mat-option>
+            <mat-option value="false" >Não</mat-option>
+          </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="isClient()">
           <mat-label>Débito do cliente:</mat-label>

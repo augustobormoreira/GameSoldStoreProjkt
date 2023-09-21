@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, String>  {
     List<Client> findAllClient();
 
     @Query("from Client")
-    Optional<Client> findClientById(Long id);
+    Optional<List<Client>> findClientById(Long id);
 
     @Query("from Employee")
     List<Employee> findAllEmployee();

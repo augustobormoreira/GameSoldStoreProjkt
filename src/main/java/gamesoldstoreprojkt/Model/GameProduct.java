@@ -22,4 +22,26 @@ public class GameProduct {
     private String productDescription;
     private String productImgUrl;
     private String productIconImgUrl;
+
+
+
+    public void setToUpdatedObject(GameProduct gameProduct) {
+        this.setProductName(gameProduct.getProductName());
+        this.setProductPrice(gameProduct.getProductPrice());
+        this.setProductTags(gameProduct.getProductTags());
+        this.setProductDescription(gameProduct.getProductDescription());
+        this.setProductImgUrl(gameProduct.getProductImgUrl());
+        this.setProductIconImgUrl(gameProduct.getProductIconImgUrl());
+    }
+
+    public String toString(){
+        return "Id = " + this.getProductId() +
+                "\nNome: " + this.getProductName() +
+                "\nPreco: " + this.getProductPrice() +
+                "\n Categorias: " + this.getProductTags() +
+                "\n Descricao: " + this.getProductDescription() +
+                "\n Url Imagem" + this.getProductImgUrl() +
+                "\n Url Icone" + this.getProductIconImgUrl();
+                
+    }
 }

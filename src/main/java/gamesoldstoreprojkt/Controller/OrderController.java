@@ -2,8 +2,13 @@ package gamesoldstoreprojkt.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.Model.Order;
+import gamesoldstoreprojkt.Model.OrderDTO;
+import gamesoldstoreprojkt.Model.User;
+import gamesoldstoreprojkt.service.GameProductService;
 import gamesoldstoreprojkt.service.OrderService;
+import gamesoldstoreprojkt.service.UserService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,10 +31,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/orders")
 public class OrderController {
     private final OrderService orderService;
+    private final UserService userService;
+    private final GameProductService gameProductService;
 
     @PostMapping("/createOrder")
-    public ResponseEntity<Order> addNewOrder(@RequestBody Order order) {
-        Order newOrder = this.orderService.createOrder(order);
+    public ResponseEntity<Order> addNewOrder(@RequestBody OrderDTO orderDTO) {
+        Optional<User> userBuyer = this.userService.findUserById(orderDTO.getIdUser());
+        GameProduct [] idGamesToBuy = this.gameProductService.getGamesById(orderDTO.getIdBuyedGames());
+        Order orderToBeSaved = new Order(userBuyer.get() , idGamesToBuy); 
+        Order newOrder = this.orderService.createOrder(orderToBeSaved);
         return new ResponseEntity<>(newOrder, HttpStatus.OK);
     }
 

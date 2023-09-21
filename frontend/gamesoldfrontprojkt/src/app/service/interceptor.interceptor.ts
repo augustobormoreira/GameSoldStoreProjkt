@@ -16,7 +16,6 @@ export class InterceptorInterceptor implements HttpInterceptor {
     if(sessionStorage.getItem('sessionToken')!=null){
         const sessionToken = sessionStorage.getItem('sessionToken');
         const authReq = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + sessionToken)});
-        console.log(authReq);
         return next.handle(authReq);
     }else{
       return next.handle(request);

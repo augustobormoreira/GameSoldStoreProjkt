@@ -10,6 +10,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
+import {MatTableModule} from '@angular/material/table'
 
 import { AppComponent } from './app.component';
 import { CartComponent } from './components/cart/cart.component';
@@ -27,6 +30,9 @@ import { RemoveProductComponent } from './components/remove-product/remove-produ
 import { AddNewuserComponent } from './components/add-newuser/add-newuser.component';
 import { RemoveUserComponent } from './components/remove-user/remove-user.component';
 import { UserService } from './service/user.service';
+import { UpdateProductComponent } from './components/update-product/update-product.component';
+import { UpdateUserComponent } from './components/update-user/update-user.component';
+import { CartserviceService } from './service/cartservice.service';
 
 @NgModule({
   declarations: [
@@ -40,14 +46,19 @@ import { UserService } from './service/user.service';
     RemoveProductComponent,
     AddNewuserComponent,
     RemoveUserComponent,
+    UpdateProductComponent,
+    UpdateUserComponent,
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
+    MatTableModule,
     MatDialogModule,
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
+    MatButtonModule,
+    MatMenuModule,
     HttpClientModule,
     MatIconModule,
     FontAwesomeModule,
@@ -56,7 +67,7 @@ import { UserService } from './service/user.service';
     ReactiveFormsModule,
     NgbModule
   ],
-  providers: [GameService, LoginService, { provide: HTTP_INTERCEPTORS, useClass: InterceptorInterceptor, multi: true }, SearchGameService, UserService],
+  providers: [GameService, LoginService, { provide: HTTP_INTERCEPTORS, useClass: InterceptorInterceptor, multi: true }, SearchGameService, UserService, CartserviceService],
   bootstrap: [AppComponent],
   entryComponents: [
     AddNewuserComponent

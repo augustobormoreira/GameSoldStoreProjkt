@@ -21,12 +21,17 @@ public class TokenService {
     private String secret;
 
     public String generateToken(User user){
+        String [] userIdAndName = {
+            user.getIdentificationNumber().toString(),
+            user.getRole().toString()
+        };
+
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
                     .withIssuer("gamesoldprojkt")
                     .withSubject(user.getUsername())
-                    .withClaim("role", user.getRole().toString())
+                    .withArrayClaim("userIdAndName", userIdAndName)
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
             return token;

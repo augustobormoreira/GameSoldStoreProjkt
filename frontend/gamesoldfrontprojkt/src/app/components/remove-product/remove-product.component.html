@@ -1,7 +1,7 @@
-<ng-template #content let-modal>
+<div class="mat-dialog-content">
 	<div class="modal-header">
 		<h4 class="modal-title" id="modal-basic-title">Remover produto</h4>
-		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+		<button type="button" class="btn-close" aria-label="Close" (click)="closeDialog()"></button>
 	</div>
     <form #product="ngForm" (ngSubmit)="onSubmit($event)" >
 	<div class="modal-body">
@@ -17,7 +17,8 @@
 	</div>
     
 	<div class="modal-footer">
-		<button type="submit" class="btn btn-outline-dark" (click)="modal.close('Save click')">Remover</button>
+		<button type="submit" class="btn btn-outline-dark" (click)="closeDialog()">Remover</button>
 	</div>
     </form>
-</ng-template>
+
+</div>

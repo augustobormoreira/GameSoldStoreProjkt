@@ -1,5 +1,6 @@
 package gamesoldstoreprojkt.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,16 @@ public class OrderService {
 
     public Optional<Order> findOrderById(Long id){
         return this.orderRepository.findById(id);
+    }
+
+    public List<Order> getOrdersById(List<String> ordersId){
+        List<Order> foundOrders = new ArrayList<Order>();
+        for(int i = 0;i < ordersId.size(); i++ ){
+            foundOrders.add(
+                this.findOrderById(Long.parseLong(ordersId.get(i))).get()
+            );
+        }
+        return foundOrders;
     }
 
 }

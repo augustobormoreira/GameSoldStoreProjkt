@@ -18,6 +18,10 @@ public class GameProductService {
         return this.gameProductRepository.save(product);
     }
 
+    public GameProduct updateProduct(GameProduct product){
+        return this.gameProductRepository.save(product);
+    }
+
     public List<GameProduct> getAllProducts(){
         return this.gameProductRepository.findAll();
     }
@@ -32,5 +36,13 @@ public class GameProductService {
             return product;
         }
         return null;
+    }
+
+    public GameProduct [] getGamesById(String [] gamesId){
+        GameProduct [] foundGames = new GameProduct[gamesId.length];
+        for(int i = 0;i < gamesId.length ; i++ ){
+            foundGames[i] = this.getProductById(Long.parseLong(gamesId[i])).get();
+        }
+        return foundGames;
     }
 }

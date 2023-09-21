@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.Employee;
+import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.Model.User;
 import gamesoldstoreprojkt.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class UserService {
         return this.userRepository.findEmployeeById(id);
     }
 
-    public Optional<Client> findClientById(Long id){
+    public Optional<List<Client>> findClientById(Long id){
         return this.userRepository.findClientById(id);
     }
 
@@ -45,4 +46,13 @@ public class UserService {
         return this.userRepository.findByusername(username);
     }
     
+    public User removeUserById(String userId){
+        Optional<User> newUser = this.findUserById(userId);
+        if(newUser != null){
+            this.userRepository.delete(newUser.get());
+            return newUser.get();
+        }
+        return null;
+    }
+
 }

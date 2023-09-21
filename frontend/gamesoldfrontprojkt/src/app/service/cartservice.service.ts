@@ -1,6 +1,9 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Game } from '../components/model/Game';
+import { HttpClient } from '@angular/common/http';
+import { OrderDTO } from '../components/model/OrderDTO';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +12,7 @@ export class CartserviceService {
   public myCart: any = [];
   isRemoved: boolean = false;
   public productList = new BehaviorSubject<any>([]);
+  @Output() cartItemRemovedTriggerEvent = new EventEmitter<number>();
 
   getProductList(){
     return this.productList.asObservable();
@@ -39,8 +43,11 @@ export class CartserviceService {
       if(product.productName.localeCompare(cartItem.productName) == 0 && !this.isRemoved){
         this.myCart.splice(index, 1);
         this.isRemoved = true;
+        this.cartItemRemovedTriggerEvent.emit(this.myCart.length);
       }
     })
+
+    this.isRemoved = false;
   }
 
   removeAllItems(){
@@ -50,5 +57,11 @@ export class CartserviceService {
 
   
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
+
+  addNewOrder(orderDTO: OrderDTO){
+    this.httpClient.post(`${environment.API_URL}/orders/createOrder`, orderDTO).subscribe((data) => {
+      console.log(data);
+    })
+  }
 }

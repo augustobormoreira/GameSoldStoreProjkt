@@ -21,9 +21,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
     @ManyToOne
-    private Client clientBuyer;
-    @ManyToOne
-    private Employee employeeSeller;
+    private User clientBuyer;
     @ManyToMany
     @JoinTable(
         name = "order_products",
@@ -31,5 +29,9 @@ public class Order {
         inverseJoinColumns = @JoinColumn(name = "productId")
     )
     private GameProduct[] products;
-    private boolean isOrderFinalized;
+
+    public Order(User clientBuyer, GameProduct [] products){
+        this.clientBuyer = clientBuyer;
+        this.products = products;
+    }
 }

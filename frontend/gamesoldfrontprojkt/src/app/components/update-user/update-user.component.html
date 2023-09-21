@@ -1,0 +1,94 @@
+
+<div class="mat-dialog-content inheritWidthSize">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Atualizar Usuario</h4>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeDialog()"></button>
+    </div>
+    <div #userProperties class="modal-body">
+      <form [formGroup]="userForm" (ngSubmit)="updateConfirmedUser()" >
+      <div class="container-fluid">
+        <div class="row flex-row">
+          <mat-form-field>
+            <mat-label>Id do Usuario:</mat-label>
+            <input ngModel class="form-control" formControlName="userId" matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Selecione</mat-label>
+            <mat-select formControlName="userType">
+              <mat-option value="client" >Cliente</mat-option>
+              <mat-option value="employee" >Funcionário</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button class="btn btn-outline-dark" type="button" (click)="selectUserToUpdate()">Procurar</button>
+          <mat-form-field>
+            <mat-label>Nome:</mat-label>
+            <input ngModel class="form-control" formControlName="userRName" matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Número da rua:</mat-label>
+            <input ngModel class="form-control" formControlName="userStreetNumber" matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Número da casa:</mat-label>
+            <input ngModel class="form-control" formControlName="userHomeNumber" matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Nome da rua:</mat-label>
+            <input ngModel class="form-control" formControlName="userStreetName" matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Usuario:</mat-label>
+            <input ngModel class="form-control" formControlName="userUName" matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Senha:</mat-label>
+            <input ngModel class="form-control" formControlName="userPassword" matInput [type]="passwordHide ? 'password' : 'text'">
+            <button type="button" mat-icon-button matSuffix (click)="passwordHide = !passwordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordHide">
+              <mat-icon>{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>        
+          <!--Special values to CLIENT ROLE-->
+          <mat-form-field *ngIf="isClient()">
+            <mat-label>Metodo preferido de pagamento</mat-label>
+            <mat-select formControlName="preferredPaymentMethod">
+              <mat-option value="credit" >Credito</mat-option>
+              <mat-option value="debit" >Debito</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="isClient()">
+            <mat-label>Cliente está na lista negra</mat-label>
+            <mat-select formControlName="clientIsBlacklisted">
+              <mat-option value="true">Sim</mat-option>
+              <mat-option value="false">Não</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="isClient()">
+            <mat-label>Débito do cliente:</mat-label>
+            <input ngModel class="form-control" formControlName="clientDebt" matInput>
+          </mat-form-field>
+  
+          <!--Special values to EMPLOYEE ROLE-->
+          <mat-form-field *ngIf="isEmployee()">
+            <mat-label>Cargo:</mat-label>
+            <input ngModel class="form-control" formControlName="jobRole" matInput>
+          </mat-form-field >
+          <mat-form-field *ngIf="isEmployee()">
+            <mat-label>Salário:</mat-label>
+            <input ngModel class="form-control" formControlName="empSalary" matInput>
+          </mat-form-field >
+  
+  
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-dark" [disabled]="buttonEnabler()" >Adicionar</button>
+          </div>    
+       
+        
+        </div>
+      </div>
+  
+    </form>
+    </div>
+   
+  
+  
+  

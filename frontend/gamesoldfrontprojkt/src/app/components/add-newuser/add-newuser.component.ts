@@ -5,6 +5,7 @@ import { UserService } from 'src/app/service/user.service';
 import { UserEmployee } from '../model/UserEmployee';
 import { FormControl, FormGroup } from '@angular/forms';
 import { User } from '../model/User';
+import { UserClient } from '../model/UserClient';
 
 @Component({
   selector: 'app-add-newuser',
@@ -54,16 +55,39 @@ export class AddNewuserComponent implements OnInit {
       const newEmployee = this.createEmployee();
       this.addNewEmployee(newEmployee);
     }
-    this.closeModal();
+    else if(this.isClient()){
+      const newClient = this.createClient();
+      this.addNewClient(newClient);
+    }
+    this.closeDialog();
   }
 
 
-  addNewEmployee(employee: User){
+  addNewEmployee(employee: UserEmployee){
     console.log(this.userService.addNewEmployee(employee));
   }
 
+  addNewClient(client: UserClient){
+    console.log(this.userService.addNewClient(client));
+  }
+
+  createClient(){
+    const newClient: UserClient =  new UserClient(
+      this.userForm.get('userRName')?.value,
+      this.userForm.get('userStreetNumber')?.value,
+      this.userForm.get('userHomeNumber')?.value,
+      this.userForm.get('userStreetName')?.value,
+      this.userForm.get('userUName')?.value,
+      this.userForm.get('userPassword')?.value,
+      this.userForm.get('preferredPaymentMethod')?.value,
+      this.userForm.get('clientIsBlacklisted')?.value,
+      this.userForm.get('clientDebt')?.value
+    );
+    return newClient;
+  }
+
   createEmployee(){
-    const newEmployee: User =  new UserEmployee(
+    const newEmployee: UserEmployee =  new UserEmployee(
       this.userForm.get('userRName')?.value,
       this.userForm.get('userStreetNumber')?.value,
       this.userForm.get('userHomeNumber')?.value,
@@ -77,7 +101,7 @@ export class AddNewuserComponent implements OnInit {
     return newEmployee;
   }
 
-  closeModal() {
+  closeDialog() {
     this.dialogRef.close();
   }
 

@@ -3,6 +3,11 @@
     width: 100%;
 }
 
+.customStylingOnButton {
+    overflow-x: hidden !important;
+    white-space: pre-wrap !important;
+}
+
 .centerIcon {
    margin-left: auto;
    margin-right: auto;

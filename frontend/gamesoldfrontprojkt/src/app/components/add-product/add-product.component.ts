@@ -4,6 +4,10 @@ import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProductDTO } from '../model/ProductDTO';
 import { environment } from 'src/environments/environment';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Game } from '../model/Game';
+import { GameService } from 'src/app/service/game.service';
 
 @Component({
   selector: 'app-add-product',
@@ -11,51 +15,44 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./add-product.component.css']
 })
 export class AddProductComponent implements OnInit {
-  @ViewChild('content') content: any;
-  private closeResult!: String;
+  productForm: FormGroup = new FormGroup(
+    {productName: new FormControl(),
+    productDescription: new FormControl(),
+    productPrice: new FormControl(),
+    productCategories: new FormControl(),
+    productUrl: new FormControl(),
+    productIconUrl: new FormControl(),
+    }
+  );
 
-  gameName = "Nome do Jogo";
-  imageUrl = "https://ih1.redbubble.net/image.1714552193.4179/flat,750x,075,f-pad,750x1000,f8f8f8.jpg";
+  categories: string[] = ['Ação', 'Story-Driven', 'RPG', 'Hack n Slash'];
+
   faSquarePlus = faSquarePlus;
 
-  constructor(private modalService: NgbModal, private httpClient: HttpClient) { }
+  constructor(private modalService: NgbModal, private httpClient: HttpClient, public dialogRef: MatDialogRef<AddProductComponent>, private gameService: GameService) { }
 
   ngOnInit(): void {
   }
 
-  onSubmit(product: any){
-    const newProduct: ProductDTO = this.createNewProductDTO(product);
-    console.log(newProduct);
-    this.httpClient.post(`${environment.API_URL}/games/addProduct`, newProduct)
-      .subscribe((result) => {
-        console.log("result", result);
-      })
+  addNewProduct(){
+    console.log(this.productForm.get('productCategories')?.value);
+    const newProduct: Game = this.createNewProduct();
+    this.gameService.addNewGame(newProduct);
+    this.closeDialog();
+  } 
+
+  closeDialog(){
+    this.dialogRef.close();
   }
 
-  createNewProductDTO(product: any): ProductDTO{
-    console.log(product.target.productCategories.value);
-    return new ProductDTO(product.target.productName.value,
-      Number.parseFloat(product.target.productPrice.value),
-      this.turnStringIntoArrayOfStrings(product.target.productCategories.value),
-      product.target.productDescription.value,
-      product.target.productImageUrl.value,
-      product.target.productIconImageUrl.value);
+  createNewProduct(): Game{
+      return new Game(
+        this.productForm.get('productName')?.value,
+        this.productForm.get('productPrice')?.value,
+        this.productForm.get('productCategories')?.value,
+        this.productForm.get('productDescription')?.value,
+        this.productForm.get('productUrl')?.value,
+        this.productForm.get('productIconUrl')?.value
+      );
   }
-
-  turnStringIntoArrayOfStrings(nonArrayString: String): Array<String>{
-    return nonArrayString.split(",");
-  }
-
-  atualizaUrl(content: HTMLInputElement){
-    this.imageUrl = content.value;
-  }
-
-  openModalService(){
-    this.modalService.open(this.content, {size: 'x1'} ).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      console.log(reason);
-    });
-  }
-
 }

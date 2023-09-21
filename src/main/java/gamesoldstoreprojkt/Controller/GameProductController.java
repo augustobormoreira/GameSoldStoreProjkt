@@ -1,9 +1,14 @@
 package gamesoldstoreprojkt.Controller;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.coyote.Response;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import gamesoldstoreprojkt.Model.Employee;
 import gamesoldstoreprojkt.Model.GameProduct;
+import gamesoldstoreprojkt.service.DatabasePDFService;
 import gamesoldstoreprojkt.service.GameProductService;
 import lombok.AllArgsConstructor;
 
@@ -41,15 +48,24 @@ public class GameProductController {
         Optional<GameProduct> newProduct = this.productService.getProductById(id);
         return new ResponseEntity<>(newProduct, HttpStatus.OK);
     }
+    @GetMapping("/gamesReport")
+    public ResponseEntity<InputStreamResource> turnListOfGamesIntoPdfOutput(){
+        List<GameProduct> allGames = this.productService.getAllProducts();
+        ByteArrayInputStream bis = DatabasePDFService.gamesPDFReport(allGames);
 
-    @PutMapping("/updateProduct")
-    public ResponseEntity<GameProduct> updateProductById(@RequestBody GameProduct gameProduct) throws Exception{
-        if(this.productService.getProductById(gameProduct.getProductId()) != null) {
-            GameProduct newProduct = this.productService.addProduct(gameProduct);
-            return new ResponseEntity<>(newProduct, HttpStatus.OK);
-        }else{
-            throw new Exception();
-        }
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", "inline; filename=teste.pdf");
+        return ResponseEntity.ok().headers(httpHeaders).contentType(MediaType.APPLICATION_PDF)
+        .body(new InputStreamResource(bis));
+    }
+    
+
+    @PutMapping("/updateProduct/{id}")
+    public ResponseEntity<GameProduct> updateProductById(@PathVariable("id") Long id, @RequestBody GameProduct gameProduct) throws Exception{
+        Optional<GameProduct> newProduct = this.productService.getProductById(id);
+        newProduct.get().setToUpdatedObject(gameProduct);
+        this.productService.updateProduct(newProduct.get());
+        return new ResponseEntity<>(newProduct.get(), HttpStatus.OK);
     }
 
     @DeleteMapping("/removeProduct/{id}")

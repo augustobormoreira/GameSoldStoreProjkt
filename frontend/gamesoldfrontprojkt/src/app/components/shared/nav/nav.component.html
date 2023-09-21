@@ -6,23 +6,30 @@
                 <button class="btn btn-light" type="submit" (click)="searchGameName(searchValue)">
                   Search
                 </button>
-                <button class="btn btn-light ms-1" *ngIf="userIsAdmin()" type="button" data-bs-target="#addProductModal" (click)="openModal('addproduct')">Adicionar Produto</button>
-                <button class="btn btn-light ms-1" *ngIf="userIsAdmin()" type="button" data-bs-target="#removeProductModal" (click)="openModal('removeproduct')">Remover Produto</button>
-                <button class="btn btn-light ms-1" *ngIf="userIsAdmin()" type="button" data-bs-target="#addUserModal" (click)="openModal('adduser')">Adicionar Usuário</button>
-                <button class="btn btn-light ms-1" *ngIf="userIsAdmin()" type="button" >Remover Usuário</button>
+                <button  class="btn btn-light ms-1" [matMenuTriggerFor]="menuProduto" *ngIf="userIsAdmin()">Produto</button>
+                <mat-menu  #menuProduto="matMenu">
+                  <button mat-menu-item (click)="openModal('addproduct')">Adicionar</button>
+                  <button mat-menu-item (click)="openModal('removeproduct')">Remover</button>
+                  <button mat-menu-item (click)="openModal('updateproduct')">Atualizar</button>
+                  <button mat-menu-item (click)="openModal('productreport')">Relatório Jogos</button>
+                </mat-menu>
+                <button  class="btn btn-light ms-1" [matMenuTriggerFor]="menuUser" *ngIf="userIsAdmin()">Usuario</button>
+                <mat-menu  #menuUser="matMenu">
+                  <button mat-menu-item (click)="openModal('adduser')">Adicionar</button>
+                  <button mat-menu-item (click)="openModal('remove-user')">Remover</button>
+                  <button mat-menu-item (click)="openModal('update-user')">Atualizar</button>
+                  <button mat-menu-item (click)="openModal('empreport')">Relatório Func</button>
+                  <button mat-menu-item (click)="openModal('clireport')">Relatório Cli</button>
+                </mat-menu>
               </form>
         </div>
         <div id="button_encasing" class="col-sm-5 d-flex flex-row-reverse">
             <button class="btn btn-light me-2" *ngIf="checkIfUserIsNotLoggedIn()" routerLink="/user-login" routerLinkActive="activate">Entrar</button>
             <span class="badge fst-italic" *ngIf="!checkIfUserIsNotLoggedIn()" >Olá, {{decodeJWT().sub}}</span>
-            <button class="btn btn-primary" routerLink="/cart">
+            <button class="btn btn-primary" routerLink="/cart" routerLinkActive="activate">
               <fa-icon [icon]="faCartPlus" class="fa-1x"></fa-icon>
               <div class="badge bg-danger custom-font-10-size">{{totalCartItems}}</div>
             </button>         
         </div>
       </div>
   </nav>
-
-  <app-add-product #addProductModal></app-add-product>
-  <app-remove-product #removeProductModal></app-remove-product>
-  <app-remove-user #removeUserModal></app-remove-user>

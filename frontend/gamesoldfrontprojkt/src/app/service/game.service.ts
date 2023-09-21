@@ -15,4 +15,20 @@ export class GameService {
     getAllGames(): Observable<Game[]>{
         return this.httpClient.get<Game[]>(this.productUrl);
     }
+
+    getGameById(gameId: String): Observable<Game>{
+        return this.httpClient.get<Game>(`${environment.API_URL}/games/${gameId}`)
+    }
+
+    addNewGame(game: Game){
+        this.httpClient.post(`${environment.API_URL}/games/addProduct`, game).subscribe((result) => {
+            console.log(result);
+        })
+    }
+
+    updateGame(game: Game){
+        this.httpClient.put(`${environment.API_URL}/games/updateProduct/${game.productId}`, game).subscribe((result) => {
+            console.log(result);
+        })
+    }
 } 

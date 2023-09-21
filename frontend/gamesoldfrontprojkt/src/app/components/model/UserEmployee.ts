@@ -2,25 +2,25 @@ import { User } from "./User";
 
 export class UserEmployee extends User {
 
-    private _jobRole: string;
-    private _salary: string;
+    jobRole: string;
+    salary: string;
 
     constructor(uName: string, stNumber: string, hoNumber: string, stName: string, uUser: string, uPw: string, jbRole: string, empSalary: string){
         super(uName, stNumber, hoNumber, stName, uUser, uPw);
-        this._jobRole = jbRole;
-        this._salary = empSalary;
+        this.jobRole = jbRole;
+        this.salary = empSalary;
     }
 
-    public get jobRole(): string {
-        return this._jobRole;
+    public get getJobRole(): string {
+        return this.jobRole;
     }
-    public set jobRole(value: string) {
-        this._jobRole = value;
+    public set setJobRole(value: string) {
+        this.jobRole = value;
     }
-    public get salary(): string {
-        return this._salary;
+    public get getSalary(): string {
+        return this.salary;
     }
-    public set salary(value: string) {
-        this._salary = value;
+    public set setSalary(value: string) {
+        this.salary = value;
     }
 }

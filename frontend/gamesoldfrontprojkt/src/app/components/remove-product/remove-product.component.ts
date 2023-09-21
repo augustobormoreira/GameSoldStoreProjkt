@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 
@@ -12,7 +13,7 @@ export class RemoveProductComponent implements OnInit {
   @ViewChild('content') content: any;
   private closeResult!: String;
   
-  constructor(private httpClient: HttpClient, private modalService: NgbModal) { }
+  constructor(private httpClient: HttpClient, private modalService: NgbModal, public dialogRef: MatDialogRef<RemoveProductComponent>) { }
   
   ngOnInit(): void {
   }
@@ -24,13 +25,11 @@ export class RemoveProductComponent implements OnInit {
       })
   }
 
-  openModalService(){
-    this.modalService.open(this.content, {size: 'x1'} ).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      console.log(reason);
-    });
+  closeDialog(){
+    this.dialogRef.close();
   }
+
+  
 
 
 }

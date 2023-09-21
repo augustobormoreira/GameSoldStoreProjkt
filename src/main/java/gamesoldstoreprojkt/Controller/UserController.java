@@ -1,11 +1,18 @@
 package gamesoldstoreprojkt.Controller;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
+import javax.print.attribute.standard.Media;
+
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.Employee;
 import gamesoldstoreprojkt.Model.User;
+import gamesoldstoreprojkt.Model.UserRoles;
+import gamesoldstoreprojkt.service.DatabasePDFService;
 import gamesoldstoreprojkt.service.UserService;
+import io.micrometer.core.ipc.http.HttpSender.Response;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -38,47 +48,84 @@ public class UserController {
         return new ResponseEntity<>(allEmployees, HttpStatus.OK);
     }
 
+    @GetMapping("/allEmpsToPdf")
+    public ResponseEntity<InputStreamResource> turnListOfEmployeesIntoPdfOutput(){
+        List<Employee> allEmployees = this.userService.findAllEmployees();
+        ByteArrayInputStream bis = DatabasePDFService.employeePDFReport(allEmployees);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", "inline; filename=teste.pdf");
+        return ResponseEntity.ok().headers(httpHeaders).contentType(MediaType.APPLICATION_PDF)
+        .body(new InputStreamResource(bis));
+    }
+    
+    @GetMapping("/allCliToPdf")
+    public ResponseEntity<InputStreamResource> turnListOfClientsIntoPdfOutput(){
+        List<Client> allClients = this.userService.findAllClients();
+        ByteArrayInputStream bis = DatabasePDFService.clientPDFReport(allClients);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", "inline; filename=teste.pdf");
+        return ResponseEntity.ok().headers(httpHeaders).contentType(MediaType.APPLICATION_PDF)
+        .body(new InputStreamResource(bis));
+    }
+
+
     @PostMapping("/addClient")
     public ResponseEntity<Client> addNewClient(@RequestBody Client client){
         String password = new BCryptPasswordEncoder().encode(client.getPassword());
+        client.setRole(UserRoles.USER);
         client.setPassword(password);
+        System.out.println(client.toString());
         Client newClient = (Client) this.userService.addUser(client);
         return new ResponseEntity<>(newClient, HttpStatus.OK);
     }
 
     @PostMapping("/addEmployee")
     public ResponseEntity<Employee> addNewEmployee(@RequestBody Employee employee){
-        System.out.println("ESTE É O FUNCIONARIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO " + employee.getName());
         String password = new BCryptPasswordEncoder().encode(employee.getPassword());
         employee.setPassword(password);
+        employee.setRole(UserRoles.ADMIN);
         Employee newEmployee = (Employee) this.userService.addUser(employee);
         return new ResponseEntity<>(newEmployee, HttpStatus.OK);
     }
 
-    @GetMapping("/{cpf}")
-    public ResponseEntity<Optional<User>> findUserByCpf(@PathVariable("cpf") String identificationNumber){
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<User>> findUserById(@PathVariable("id") String identificationNumber){
         Optional<User> newUser = this.userService.findUserById(identificationNumber);
         return new ResponseEntity<>(newUser, HttpStatus.OK); 
     }
 
-    @PutMapping("/updateClient")
-    public ResponseEntity<Client> updateClientByCpf(@RequestBody Client updatedClient) throws Exception{
-        if(this.userService.findClientById(updatedClient.getIdentificationNumber()) != null){
-            Client newClient = (Client) this.userService.addUser(updatedClient);
-            return new ResponseEntity<>(newClient, HttpStatus.OK);
-        } else{
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<User> deleteUserById(@PathVariable("id") String id ) throws Exception{
+        User newUser = this.userService.removeUserById(id);
+        if(newUser != null){
+            return new ResponseEntity<>(newUser, HttpStatus.OK);
+        }else{
             throw new Exception();
         }
+
     }
 
-    @PutMapping("/updateEmployee")
-    public ResponseEntity<Employee> updateEmployeeByCpf(@RequestBody Employee updatedEmployee) throws Exception{
-        if(this.userService.findEmployeeById(updatedEmployee.getIdentificationNumber()) != null){
-            Employee newEmployee = (Employee) this.userService.addUser(updatedEmployee);
-            return new ResponseEntity<>(newEmployee, HttpStatus.OK);
-        } else{
-            throw new Exception();
-        }
+    @PutMapping("/updateClient/{id}")
+    public ResponseEntity<Client> updateClientByCpf(@PathVariable("id") String id, @RequestBody Client updatedClient) throws Exception{
+        String password = new BCryptPasswordEncoder().encode(updatedClient.getPassword());
+        updatedClient.setPassword(password);
+        Optional<User> clientToUpdate = this.userService.findUserById(id);
+        ((Client) clientToUpdate.get()).setToUpdatedValues(updatedClient);
+        Client newClient = (Client) this.userService.addUser(clientToUpdate.get());
+        return new ResponseEntity<>(newClient, HttpStatus.OK);
+       
+    }
+
+    @PutMapping("/updateEmployee/{id}")
+    public ResponseEntity<Employee> updateEmployeeByCpf(@PathVariable("id") String id, @RequestBody Employee updatedEmployee) throws Exception{
+        String password = new BCryptPasswordEncoder().encode(updatedEmployee.getPassword());
+        updatedEmployee.setPassword(password);
+        Optional<User> employeeToUpdate = this.userService.findUserById(id);
+        ( (Employee) employeeToUpdate.get()).setToUpdatedValues(updatedEmployee);
+        Employee newEmployee = (Employee) this.userService.addUser(employeeToUpdate.get());
+        return new ResponseEntity<>(newEmployee, HttpStatus.OK);
     }
 
 }

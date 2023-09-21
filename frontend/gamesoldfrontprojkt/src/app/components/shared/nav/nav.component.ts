@@ -11,6 +11,9 @@ import { HttpClient } from '@angular/common/http';
 import { UserEmployee } from '../../model/UserEmployee';
 import { User } from '../../model/User';
 import { environment } from 'src/environments/environment';
+import { RemoveUserComponent } from '../../remove-user/remove-user.component';
+import { UpdateProductComponent } from '../../update-product/update-product.component';
+import { UpdateUserComponent } from '../../update-user/update-user.component';
 
 @Component({
   selector: 'nav-bar',
@@ -19,23 +22,78 @@ import { environment } from 'src/environments/environment';
 })
 export class NavComponent implements OnInit {
   faCartPlus = faCartPlus;
-  @ViewChild('addProductModal') addProductModal!: AddProductComponent;
-  @ViewChild('removeProductModal') removeProductModal!: RemoveProductComponent;
 
   public totalCartItems: number = 0;
   constructor(private cartService: CartserviceService, private searchGameService: SearchGameService, public dialog: MatDialog, private httpClient: HttpClient){};
 
   openModal(modalName: string){
     if(modalName === 'addproduct'){
-      this.addProductModal.openModalService();
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.id = 'modal-addproduct';
+      dialogConfig.height = '800px';
+      dialogConfig.width = '1000px';
+      const dialogRef = this.dialog.open(AddProductComponent, dialogConfig);
     }else if(modalName === 'removeproduct'){
-      this.removeProductModal.openModalService();
-    }else if(modalName === 'adduser'){
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.id = 'modal-removeproduct';
+      dialogConfig.height = '300px';
+      dialogConfig.width = '500px';
+      const dialogRef = this.dialog.open(RemoveProductComponent, dialogConfig);
+    }else if(modalName === 'updateproduct'){
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.id = 'modal-updateproduct';
+      dialogConfig.height = '800px';
+      dialogConfig.width = '1000px';
+      const dialogRef = this.dialog.open(UpdateProductComponent, dialogConfig);
+    }else if(modalName === 'empreport'){
+      this.httpClient.get(`${environment.API_URL}/users/allEmpsToPdf`, {responseType: 'blob'}).subscribe((data) => {
+        var blob = new Blob([data], {type: 'application/pdf'});
+
+        var downloadUrl = window.URL.createObjectURL(data);
+        var link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = "relatorio.pdf";
+        link.click();
+      })
+    }else if(modalName === 'clireport'){
+      this.httpClient.get(`${environment.API_URL}/users/allCliToPdf`, {responseType: 'blob'}).subscribe((data) => {
+        var blob = new Blob([data], {type: 'application/pdf'});
+
+        var downloadUrl = window.URL.createObjectURL(data);
+        var link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = "relatorio.pdf";
+        link.click();
+      })
+    }else if(modalName === 'productreport'){
+      this.httpClient.get(`${environment.API_URL}/games/gamesReport`, {responseType: 'blob'}).subscribe((data) => {
+        var blob = new Blob([data], {type: 'application/pdf'});
+
+        var downloadUrl = window.URL.createObjectURL(data);
+        var link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = "relatorio.pdf";
+        link.click();
+      })
+    }
+    else if(modalName === 'adduser'){
       const dialogConfig = new MatDialogConfig();
       dialogConfig.id = 'modal-adduser';
       dialogConfig.height = '800px';
       dialogConfig.width = '1000px';
       const dialogRef = this.dialog.open(AddNewuserComponent, dialogConfig);
+      }else if(modalName === 'remove-user'){
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.id = 'modal-removeuser';
+        dialogConfig.height = '300px';
+        dialogConfig.width = '500px';
+        const dialogRef = this.dialog.open(RemoveUserComponent, dialogConfig);
+      }else if(modalName === 'update-user'){
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.id = 'modal-updateuser';
+        dialogConfig.height = '800px';
+        dialogConfig.width = '1000px';
+        const dialogRef = this.dialog.open(UpdateUserComponent, dialogConfig);
       }
 
     }
@@ -47,7 +105,11 @@ export class NavComponent implements OnInit {
       .subscribe(res => {
         this.totalCartItems = res.length;
       })
-      
+    
+    this.cartService.cartItemRemovedTriggerEvent.subscribe((data) => {
+      this.totalCartItems = data;
+    })
+
   }
 
   searchGameName(searchedNameGame: HTMLInputElement): void {
@@ -56,7 +118,7 @@ export class NavComponent implements OnInit {
 
   userIsAdmin(): boolean {
     const userToken = this.decodeJWT();
-    if(userToken != null && userToken.role=="ADMIN"){
+    if(userToken != null && userToken.userIdAndName[1]=="ADMIN"){
       return true;
     }
 
