@@ -27,10 +27,6 @@ export class AddNewuserComponent implements OnInit {
     jobRole: new FormControl(),
     empSalary: new FormControl()
   });
-
-
-  @ViewChild('addUser') addUser: any;
-  private _closeResult!: string;
   passwordHide = true;
   constructor(public dialogRef: MatDialogRef<AddNewuserComponent>, private userService: UserService) {
 

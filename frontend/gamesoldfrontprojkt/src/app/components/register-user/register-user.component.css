@@ -1,0 +1,9 @@
+:host {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .inheritWidthSize {
+    width: 100%;
+  }

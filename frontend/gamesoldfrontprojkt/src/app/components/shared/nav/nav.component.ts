@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { RemoveUserComponent } from '../../remove-user/remove-user.component';
 import { UpdateProductComponent } from '../../update-product/update-product.component';
 import { UpdateUserComponent } from '../../update-user/update-user.component';
+import { RegisterUserComponent } from '../../register-user/register-user.component';
 
 @Component({
   selector: 'nav-bar',
@@ -94,6 +95,12 @@ export class NavComponent implements OnInit {
         dialogConfig.height = '800px';
         dialogConfig.width = '1000px';
         const dialogRef = this.dialog.open(UpdateUserComponent, dialogConfig);
+      }else if(modalName === 'register-user'){
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.id = 'modal-registeruser';
+        dialogConfig.height = '800px';
+        dialogConfig.width = '1000px';
+        const dialogRef = this.dialog.open(RegisterUserComponent, dialogConfig);
       }
 
     }

@@ -37,6 +37,7 @@ public class SecurityConfig implements WebMvcConfigurer{
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                   .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.POST, "auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "users/addClient").permitAll()
                     .requestMatchers(HttpMethod.POST, "/orders").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "/orders").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/orders").hasRole("ADMIN")

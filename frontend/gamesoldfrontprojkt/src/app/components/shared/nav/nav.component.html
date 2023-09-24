@@ -24,9 +24,10 @@
               </form>
         </div>
         <div id="button_encasing" class="col-sm-5 d-flex flex-row-reverse">
+          <button class="btn btn-light me-2" *ngIf="checkIfUserIsNotLoggedIn()" (click)="openModal('register-user')">Registrar</button>
             <button class="btn btn-light me-2" *ngIf="checkIfUserIsNotLoggedIn()" routerLink="/user-login" routerLinkActive="activate">Entrar</button>
             <span class="badge fst-italic" *ngIf="!checkIfUserIsNotLoggedIn()" >Olá, {{decodeJWT().sub}}</span>
-            <button class="btn btn-primary" routerLink="/cart" routerLinkActive="activate">
+            <button class="btn btn-primary me-2" routerLink="/cart" routerLinkActive="activate">
               <fa-icon [icon]="faCartPlus" class="fa-1x"></fa-icon>
               <div class="badge bg-danger custom-font-10-size">{{totalCartItems}}</div>
             </button>         

@@ -33,6 +33,7 @@ import { UserService } from './service/user.service';
 import { UpdateProductComponent } from './components/update-product/update-product.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
 import { CartserviceService } from './service/cartservice.service';
+import { RegisterUserComponent } from './components/register-user/register-user.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { CartserviceService } from './service/cartservice.service';
     RemoveUserComponent,
     UpdateProductComponent,
     UpdateUserComponent,
+    RegisterUserComponent,
   ],
   imports: [
     AppRoutingModule,
