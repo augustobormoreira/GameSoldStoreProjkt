@@ -12,7 +12,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
-import {MatTableModule} from '@angular/material/table'
+import {MatTableModule} from '@angular/material/table';
+import {MatListModule} from '@angular/material/list';
 
 import { AppComponent } from './app.component';
 import { CartComponent } from './components/cart/cart.component';
@@ -61,6 +62,7 @@ import { RegisterUserComponent } from './components/register-user/register-user.
     MatInputModule,
     MatButtonModule,
     MatMenuModule,
+    MatListModule,
     HttpClientModule,
     MatIconModule,
     FontAwesomeModule,

@@ -1,8 +1,29 @@
 <div class="container-fluid py-3 custom-bg-color">
     <div class="row">
+        <div class="col-lg-2 custom-shadeofgray-bg-color rounded-2 custom-sizing">
+            <p class="fs-5">Categorias:</p>
+            <mat-selection-list [(ngModel)]="listedTags" #tags>
+                <mat-list-option  color="primary" *ngFor="let tag of typesOfTags" [value]="tag">
+                  {{tag}}
+                </mat-list-option>
+              </mat-selection-list>
+              <div class="d-flex flex-row justify-content-between">
+                <div class="p-2 bd-highlight">
+                    <button class="btn btn-secondary" (click)="removeFilters(tags)">Remover filtros</button>
+                </div>
+                <div class="p-2 bd-highlight">
+                    <button class="btn btn-primary" (click)="printSelectedOptions(tags.selectedOptions.selected)">Aplicar filtro</button>
+                </div>
+              </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="row d-flex flex-row justify-content-center">
                 <div class="col-md-2" *ngFor="let game of games">
                     <app-list-item [game]=game></app-list-item>
                 </div>
+            </div>
+        </div>
     </div>
+    
 </div>
 
