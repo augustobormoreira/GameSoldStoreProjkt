@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,22 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'gamesoldfrontprojkt';
+
+
+  adminIsLoggedIn(){
+    const userToken = this.decodeJWT();
+    if(userToken != null && userToken.userIdAndName[1]=="ADMIN"){
+      return true;
+    }
+
+    return false;
+  }
+
+  decodeJWT(): any{
+    try {
+      return jwtDecode(sessionStorage.getItem('sessionToken')!);
+    }catch(Error){
+      return null;
+    }
+  }
 }

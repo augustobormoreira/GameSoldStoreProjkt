@@ -70,9 +70,7 @@ public class GameProductController {
 
     @DeleteMapping("/removeProduct/{id}")
     public ResponseEntity<GameProduct> deleteProductById(@PathVariable("id") Long id) throws Exception{
-        GameProduct newGameProduct = this.productService.removeProductById(
-            this.productService.getProductById(id).get()
-        );
+        GameProduct newGameProduct = this.productService.removeProductById(id);
         if(newGameProduct!=null){
             return new ResponseEntity<GameProduct>(newGameProduct, HttpStatus.OK);
         }else{

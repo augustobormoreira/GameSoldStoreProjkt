@@ -1,0 +1,64 @@
+
+<div class="mat-dialog-content inheritWidthSize">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Editar Produto</h4>
+    </div>
+    <div class="modal-body">
+      <div class="container-fluid">
+        <div class="row flex-row">
+          <mat-label>Id do Produto:</mat-label>
+          <input ngModel class="form-control" [(ngModel)]="productId" matInput (ngModelChange)="searchIfProductExistsOnDatabase($event)" >
+        </div>
+      </div>
+      <form [formGroup]="productForm" (ngSubmit)="addNewProduct()" >
+      <div class="container-fluid">
+        <div class="row flex-row">
+          <mat-form-field>
+            <mat-label>Nome:</mat-label>
+            <input ngModel class="form-control" formControlName="productName" matInput>
+          </mat-form-field>
+          <mat-form-field>
+          <mat-label>Descrição:</mat-label>
+            <input ngModel class="form-control" formControlName="productDescription" matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Preço:</mat-label>
+              <input ngModel class="form-control" formControlName="productPrice" matInput>
+            </mat-form-field>
+            <mat-form-field>    
+                <mat-label>Categorias</mat-label>
+                <mat-select formControlName="productCategories" multiple>
+                  <mat-select-trigger>
+                    {{productForm.get('productCategories')?.value?.[0] || ''}}
+                    <span *ngIf="(productForm.get('productCategories')?.value?.length || 0) > 1" class="example-additional-selection">
+                      (+{{(productForm.get('productCategories')?.value?.length || 0) - 1}} {{productForm.get('productCategories')?.value?.length === 2 ? 'outra' : 'outras'}})
+                    </span>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let category of categories" [value]="category">{{category}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+
+            <mat-form-field>
+                <mat-label>URL Foto:</mat-label>
+                <input ngModel class="form-control" formControlName="productUrl" matInput>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>URL Ícone:</mat-label>
+                <input ngModel class="form-control" formControlName="productIconUrl" matInput>
+            </mat-form-field>
+  
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-dark" >Editar</button>
+          </div>    
+       
+        
+        </div>
+      </div>
+  
+    </form>
+    </div>
+   
+  
+  
+  

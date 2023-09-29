@@ -8,13 +8,14 @@ export class User {
     password: String;
     userRole!: String;
 
-    constructor(uName: string, stNumber: string, hoNumber: string, stName: string, uUser: string, uPw: string){
+    constructor(uName: string, stNumber: string, hoNumber: string, stName: string, uUser: string, uPw: string, userRole: String){
         this.name = uName;
         this.streetNumber = stNumber;
         this.houseNumber = hoNumber;
         this.streetName = stName;
         this.username = uUser;
         this.password = uPw;
+        this.userRole = userRole;
     }
 
     public get getUserRole(): String {

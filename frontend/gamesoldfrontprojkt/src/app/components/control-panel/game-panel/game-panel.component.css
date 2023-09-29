@@ -1,0 +1,22 @@
+.body {
+    width: 100vh;
+    height: 100%;
+}
+
+.nav-options {
+    width: 100%;
+    height: 5%;
+}
+
+.body-display {
+    width: 100%;
+    height: 95%;
+}
+
+.heighthundred {
+    height: 100%;
+}
+
+.widthhundred {
+    width: 100%;
+}

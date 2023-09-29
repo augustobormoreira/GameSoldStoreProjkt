@@ -27,7 +27,7 @@ import gamesoldstoreprojkt.Model.GameProduct;
 
 public class DatabasePDFService<T> {
  
-    public static ByteArrayInputStream employeePDFReport(List<Employee> employees) {
+    public static ByteArrayInputStream usersPDFReport(List<Employee> employees, List<Client> clients) {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
  
@@ -105,36 +105,20 @@ public class DatabasePDFService<T> {
             }
             document.add(table);
 
-            document.close();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
- 
-        return new ByteArrayInputStream(out.toByteArray());
-    }
 
-    public static ByteArrayInputStream clientPDFReport(List<Client> clients) {
-        Document document = new Document();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
- 
-        try {
- 
-            PdfWriter.getInstance(document, out);
-            document.open();
- 
             // Add Content to PDF file ->
-           Font fontHeader = FontFactory.getFont(FontFactory.TIMES_BOLD, 22);
-            Font fontTimeAndDate = FontFactory.getFont(FontFactory.TIMES_BOLD, 18);
-            Date currentDate = new Date();
-            Paragraph reportTitle = new Paragraph("Relatório de Clientes", fontHeader);
-            Paragraph reportDateAndTime = new Paragraph("Hora e Data = " + currentDate.toString(), fontTimeAndDate);
+            fontHeader = FontFactory.getFont(FontFactory.TIMES_BOLD, 22);
+            fontTimeAndDate = FontFactory.getFont(FontFactory.TIMES_BOLD, 18);
+            currentDate = new Date();
+            reportTitle = new Paragraph("Relatório de Clientes", fontHeader);
+            reportDateAndTime = new Paragraph("Hora e Data = " + currentDate.toString(), fontTimeAndDate);
             reportDateAndTime.setAlignment(Element.ALIGN_CENTER);
             reportTitle.setAlignment(Element.ALIGN_CENTER);
             document.add(reportTitle);
             document.add(reportDateAndTime);
             document.add(Chunk.NEWLINE);
  
-            PdfPTable table = new PdfPTable(7);
+            PdfPTable newTable = new PdfPTable(7);
             // Add PDF Table Header ->
             Stream.of("ID", "Nome", "N°", "Rua", "N° da Rua", "Método Pagamento", "Dívida").forEach(headerTitle -> {
                 PdfPCell header = new PdfPCell();
@@ -143,7 +127,7 @@ public class DatabasePDFService<T> {
                 header.setHorizontalAlignment(Element.ALIGN_CENTER);
                 header.setBorderWidth(2);
                 header.setPhrase(new Phrase(headerTitle, headFont));
-                table.addCell(header);
+                newTable.addCell(header);
             });
  
             for (Client client : clients) {
@@ -151,46 +135,46 @@ public class DatabasePDFService<T> {
                 idCell.setPaddingLeft(4);
                 idCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 idCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(idCell);
+                newTable.addCell(idCell);
  
                 PdfPCell nameCell = new PdfPCell(new Phrase(client.getName()));
                 nameCell.setPaddingLeft(4);
                 nameCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(nameCell);
+                newTable.addCell(nameCell);
  
                 PdfPCell houseNumberCell = new PdfPCell(new Phrase(String.valueOf(client.getHouseNumber())));
                 houseNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 houseNumberCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 houseNumberCell.setPaddingRight(4);
-                table.addCell(houseNumberCell);
+                newTable.addCell(houseNumberCell);
  
                 PdfPCell streetNameCell = new PdfPCell(new Phrase(String.valueOf(client.getStreetName())));
                 streetNameCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 streetNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 streetNameCell.setPaddingRight(4);
-                table.addCell(streetNameCell);
+                newTable.addCell(streetNameCell);
  
                 PdfPCell streetNumberCell = new PdfPCell(new Phrase(String.valueOf(client.getStreetNumber())));
                 streetNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 streetNumberCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 streetNumberCell.setPaddingRight(4);
-                table.addCell(streetNumberCell);
+                newTable.addCell(streetNumberCell);
 
                 PdfPCell paymentMethodCell = new PdfPCell(new Phrase(String.valueOf(client.getPreferredPaymentMethod())));
                 paymentMethodCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 paymentMethodCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 paymentMethodCell.setPaddingRight(4);
-                table.addCell(paymentMethodCell);
+                newTable.addCell(paymentMethodCell);
 
                 PdfPCell debtCell = new PdfPCell(new Phrase(String.valueOf(client.getClientDebt())));
                 debtCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 debtCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 debtCell.setPaddingRight(4);
-                table.addCell(debtCell);
+                newTable.addCell(debtCell);
             }
-            document.add(table);
- 
+            document.add(newTable);
+
             document.close();
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -198,7 +182,6 @@ public class DatabasePDFService<T> {
  
         return new ByteArrayInputStream(out.toByteArray());
     }
-
     public static ByteArrayInputStream gamesPDFReport(List<GameProduct> games) {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();

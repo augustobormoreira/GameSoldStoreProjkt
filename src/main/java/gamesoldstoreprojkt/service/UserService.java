@@ -3,20 +3,20 @@ package gamesoldstoreprojkt.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.Employee;
-import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.Model.User;
 import gamesoldstoreprojkt.repository.UserRepository;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
+
 @Service
 public class UserService {
-    private final UserRepository userRepository;  
+    @Autowired
+    private UserRepository userRepository;  
     
     public User addUser(User user){
         return this.userRepository.save(user);
@@ -38,12 +38,20 @@ public class UserService {
         return this.userRepository.findAllEmployee();
     }
 
+    public List<User> findAllUsers(){
+        return this.userRepository.findAll();
+    }
+
     public Optional<User> findUserById(String id){
         return this.userRepository.findById(id);
     }
 
     public UserDetails findByusername(String username){
         return this.userRepository.findByusername(username);
+    }
+
+    public Optional<Client> findByClientusername(String username){
+        return this.userRepository.findUserByusername(username);
     }
     
     public User removeUserById(String userId){

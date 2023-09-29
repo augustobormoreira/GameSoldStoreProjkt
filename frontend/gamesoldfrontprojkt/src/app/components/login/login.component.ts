@@ -4,6 +4,7 @@ import { LoginService } from 'src/app/service/login.service';
 import { FormGroup, FormBuilder, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { UserDTO } from '../model/UserDTO';
 import { Router } from '@angular/router';
+import jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +27,8 @@ export class LoginComponent implements OnInit {
     
    }
 
+
+  /* Check if there is already someone logged in on init, if not create the formgroup and proceeds normally */
   ngOnInit(): void {
 
     if(this.verifyIfUserisAlreadyLoggedIn()){
@@ -38,6 +41,8 @@ export class LoginComponent implements OnInit {
     })
   }
 
+  /* On loginForm submit create a new UserDTO to send to the backend, if succesful, create the item sessionToken for the user to navigate with and 
+  redirect him to the normal store if it is a CLIENT, if it is an employee redirect to CONTROL PANEL */
   onSubmit(): void{
     this.login = this.loginForm.get('username')?.value;
     this.password = this.loginForm.get('password')?.value;
@@ -46,17 +51,36 @@ export class LoginComponent implements OnInit {
 
     this.loginService.loginUser(this.userRequest).subscribe((res: any) => {
       sessionStorage.setItem('sessionToken', res.token);
-      console.log(typeof (localStorage.getItem('sessionToken')));
-      this.route.navigateByUrl('/product-list');
+
+      if(this.userIsAdmin()){
+        this.route.navigateByUrl('/control-panel');
+      }else{
+        this.route.navigateByUrl('/product-list');
+      }
     })
-
-    /*console.log(this.loginService.loginUser(this.userRequest).subscribe((res: any) => {
-      localStorage.setItem('sessionToken', res.token);
-      this.route.navigateByUrl('/product-list');
-    }));*/
-
   }
 
+  /* Decode json web token received from the backend to see if the logged in user is an ADMIN */
+  userIsAdmin(): boolean {
+    const userToken = this.decodeJWT();
+    if(userToken != null && userToken.userIdAndName[1]=="ADMIN"){
+      return true;
+    }
+
+    return false;
+  }
+
+
+  /* Decode json web token that is stored in sessionStorage */
+  decodeJWT(): any{
+    try {
+      return jwtDecode(sessionStorage.getItem('sessionToken')!);
+    }catch(Error){
+      return null;
+    }
+  }
+
+  /* Check if there is already an item named sessionToken in sessionStorage, if there is it means there's already a user logged in */
   verifyIfUserisAlreadyLoggedIn(): boolean{
     if(sessionStorage.getItem('sessionToken') == null) return false;
 

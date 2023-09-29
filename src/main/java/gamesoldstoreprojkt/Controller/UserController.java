@@ -36,6 +36,12 @@ import lombok.AllArgsConstructor;
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("/allUsers")
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> allUsers = this.userService.findAllUsers();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    }
+
     @GetMapping("/clients")
     public ResponseEntity<List<Client>> getAllClients(){
         List<Client> allClients = this.userService.findAllClients();
@@ -48,21 +54,11 @@ public class UserController {
         return new ResponseEntity<>(allEmployees, HttpStatus.OK);
     }
 
-    @GetMapping("/allEmpsToPdf")
-    public ResponseEntity<InputStreamResource> turnListOfEmployeesIntoPdfOutput(){
-        List<Employee> allEmployees = this.userService.findAllEmployees();
-        ByteArrayInputStream bis = DatabasePDFService.employeePDFReport(allEmployees);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Disposition", "inline; filename=teste.pdf");
-        return ResponseEntity.ok().headers(httpHeaders).contentType(MediaType.APPLICATION_PDF)
-        .body(new InputStreamResource(bis));
-    }
-    
-    @GetMapping("/allCliToPdf")
-    public ResponseEntity<InputStreamResource> turnListOfClientsIntoPdfOutput(){
+    @GetMapping("/users_report")
+    public ResponseEntity<InputStreamResource> turnListOfUsersIntoPdfOutput(){
         List<Client> allClients = this.userService.findAllClients();
-        ByteArrayInputStream bis = DatabasePDFService.clientPDFReport(allClients);
+        List<Employee> allEmployees = this.userService.findAllEmployees();
+        ByteArrayInputStream bis = DatabasePDFService.usersPDFReport(allEmployees, allClients);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Disposition", "inline; filename=teste.pdf");

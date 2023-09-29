@@ -1,7 +1,11 @@
 package gamesoldstoreprojkt.Model;
 
+import java.util.ArrayList;
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +23,8 @@ public class Client extends User {
     private String preferredPaymentMethod;
     private boolean clientIsBlacklisted;
     private int clientDebt;
+    @OneToMany(fetch = FetchType.LAZY)
+    private Card [] cards;
 
     public void setToUpdatedValues(Client client){
         this.setName(client.getName());
@@ -27,6 +33,7 @@ public class Client extends User {
         this.setStreetName(client.getStreetName());
         this.setUsername(client.getUsername());
         this.setPassword(client.getPassword());
+        this.setCards(client.getCards());
         this.setRole(UserRoles.USER);
         this.setPreferredPaymentMethod(client.getPreferredPaymentMethod());
         this.setClientIsBlacklisted(client.isClientIsBlacklisted());

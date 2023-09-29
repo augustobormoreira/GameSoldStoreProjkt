@@ -5,8 +5,8 @@ export class UserClient extends User {
     clientIsBlacklisted!: boolean;
     clientDebt!: number;
 
-    constructor(uName: string, stNumber: string, hoNumber: string, stName: string, uUser: string, uPw: string, ppMethod: string, cliBL: boolean, cliDbt: number){
-        super(uName, stNumber, hoNumber, stName, uUser, uPw);
+    constructor(uName: string, stNumber: string, hoNumber: string, stName: string, uUser: string, uPw: string, userRole: String, ppMethod: string, cliBL: boolean, cliDbt: number){
+        super(uName, stNumber, hoNumber, stName, uUser, uPw, userRole);
         this.preferredPaymentMethod = ppMethod;
         this.clientIsBlacklisted = cliBL;
         this.clientDebt = cliDbt;

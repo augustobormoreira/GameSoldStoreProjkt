@@ -1,5 +1,5 @@
 export class Game {
-    private _productId!: number;
+    productId!: number;
     productName!: string;
     productPrice!: number;
     productTags!: Array<String>;
@@ -14,13 +14,6 @@ export class Game {
         this.productDescription = pDescription;
         this.productImgUrl = pImgUrl;
         this.productIconImgUrl = pIconImgUrl;
-    }
-
-    public get productId(): number {
-        return this._productId;
-    }
-    public set productId(value: number) {
-        this._productId = value;
     }
 
 

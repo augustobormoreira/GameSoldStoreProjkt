@@ -1,0 +1,23 @@
+<div class="mat-dialog-content">
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Remover produto</h4>
+	</div>
+    <form #product="ngForm" (ngSubmit)="onSubmit($event)" >
+	<div class="modal-body">
+		<div class="container-fluid">
+            <div class="row">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Id do jogo:</span>
+                    <input type="text" ngModel class="form-control" [(ngModel)]="productId" placeholder="Id do jogo" aria-label="gameId" name="productId" aria-describedby="basic-addon1">
+                </div>
+            </div>
+
+          </div>
+	</div>
+    
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-outline-dark">Remover</button>
+	</div>
+    </form>
+
+</div>

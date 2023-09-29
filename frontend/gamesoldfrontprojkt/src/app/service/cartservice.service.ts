@@ -5,25 +5,24 @@ import { HttpClient } from '@angular/common/http';
 import { OrderDTO } from '../components/model/OrderDTO';
 import { environment } from 'src/environments/environment';
 
+/* Service responsible for all cart methods related, receives an httpClient via dependency injection */
 @Injectable({
   providedIn: 'root'
 })
 export class CartserviceService {
-  public myCart: any = [];
+  public myCart: Array<Game> = [];
   isRemoved: boolean = false;
-  public productList = new BehaviorSubject<any>([]);
+  public productList = new BehaviorSubject<Array<Game>>([]);
   @Output() cartItemRemovedTriggerEvent = new EventEmitter<number>();
 
+
+  /* This method returns the productList as an observable for other components to subscribe to */
   getProductList(){
     return this.productList.asObservable();
   }
 
-  setProduct(product: any){
-    this.myCart.push(...product);
-    this.productList.next(product);
-  }
-
-  addToCart(product: any){
+  /* This method receives a product and adds it into the cart and pushes the cart into the behaviourSubject productList */
+  addToCart(product: Game){
     this.myCart.push(product);
     this.productList.next(this.myCart);
     this.getTotalPrice();
@@ -31,7 +30,7 @@ export class CartserviceService {
 
   getTotalPrice(){
     let totalAmmount = 0;
-    this.myCart.map((cartItem: any) => {
+    this.myCart.map((cartItem: Game) => {
       totalAmmount += cartItem.productPrice;
     })
 
@@ -39,7 +38,7 @@ export class CartserviceService {
   }
 
   removeCartItem(product: Game){
-    this.myCart.map((cartItem: any, index:any) => {
+    this.myCart.map((cartItem: Game, index: number) => {
       if(product.productName.localeCompare(cartItem.productName) == 0 && !this.isRemoved){
         this.myCart.splice(index, 1);
         this.isRemoved = true;
@@ -59,6 +58,8 @@ export class CartserviceService {
 
   constructor(private httpClient: HttpClient) { }
 
+
+  /* This is a post method. Receives an OrderDTO as parameter and sends it to be added into the database */
   addNewOrder(orderDTO: OrderDTO){
     this.httpClient.post(`${environment.API_URL}/orders/createOrder`, orderDTO).subscribe((data) => {
       console.log(data);

@@ -26,15 +26,20 @@ import { InterceptorInterceptor } from './service/interceptor.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginService } from './service/login.service';
 import { SearchGameService } from './service/searchGame.service';
-import { AddProductComponent } from './components/add-product/add-product.component';
-import { RemoveProductComponent } from './components/remove-product/remove-product.component';
-import { AddNewuserComponent } from './components/add-newuser/add-newuser.component';
-import { RemoveUserComponent } from './components/remove-user/remove-user.component';
+import { RemoveUserComponent } from './components/user-components/remove-user/remove-user.component';
 import { UserService } from './service/user.service';
-import { UpdateProductComponent } from './components/update-product/update-product.component';
-import { UpdateUserComponent } from './components/update-user/update-user.component';
+import { UpdateProductComponent } from './components/product-components/update-product/update-product.component';
 import { CartserviceService } from './service/cartservice.service';
-import { RegisterUserComponent } from './components/register-user/register-user.component';
+import { RegisterUserComponent } from './components/user-components/register-user/register-user.component';
+import { UpdateUserComponent } from './components/user-components/update-user/update-user.component';
+import { AddNewuserComponent } from './components/user-components/add-newuser/add-newuser.component';
+import { AddProductComponent } from './components/product-components/add-product/add-product.component';
+import { RemoveProductComponent } from './components/product-components/remove-product/remove-product.component';
+import { ControlPanelComponent } from './components/control-panel/control-panel.component';
+import { UserPanelComponent } from './components/control-panel/user-panel/user-panel.component';
+import { GamePanelComponent } from './components/control-panel/game-panel/game-panel.component';
+import { AlluserscomponentComponent } from './components/control-panel/user-panel/alluserscomponent/alluserscomponent.component';
+import { AllgamescomponentComponent } from './components/control-panel/game-panel/allgamescomponent/allgamescomponent.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +56,11 @@ import { RegisterUserComponent } from './components/register-user/register-user.
     UpdateProductComponent,
     UpdateUserComponent,
     RegisterUserComponent,
+    ControlPanelComponent,
+    UserPanelComponent,
+    GamePanelComponent,
+    AlluserscomponentComponent,
+    AllgamescomponentComponent,
   ],
   imports: [
     AppRoutingModule,

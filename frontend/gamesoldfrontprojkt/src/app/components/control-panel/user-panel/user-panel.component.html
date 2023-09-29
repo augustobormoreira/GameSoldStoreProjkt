@@ -1,0 +1,25 @@
+<div class="body d-flex flex-column">
+    <div class="nav-options d-flex flex-row border-bottom border-dark">
+        <div class="col-sm-2 align-items-center d-flex flex-row">
+            <span class="fs-5">Ações Usuários:</span>
+        </div>
+        <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <button type="button" class="btn btn-outline-warning" routerLink="all-users">Todos</button>
+        </div>
+        <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <button type="button" class="btn btn-outline-secondary" (click)="downloadUsersReport()">Relatório</button>
+        </div>
+        <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <button type="button" class="btn btn-outline-success" routerLink="add-user">Adicionar</button>
+        </div>
+        <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <button type="button" class="btn btn-outline-primary" routerLink="update-user">Atualizar</button>
+        </div>
+        <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <button type="button" class="btn btn-outline-danger" routerLink="remove-user">Remover</button>
+        </div>
+    </div>
+    <div class="body-display">
+        <router-outlet></router-outlet>
+    </div>
+</div>

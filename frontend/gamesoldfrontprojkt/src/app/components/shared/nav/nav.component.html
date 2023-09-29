@@ -6,27 +6,15 @@
                 <button class="btn btn-light" type="submit" (click)="searchGameName(searchValue)">
                   Search
                 </button>
-                <button  class="btn btn-light ms-1" [matMenuTriggerFor]="menuProduto" *ngIf="userIsAdmin()">Produto</button>
-                <mat-menu  #menuProduto="matMenu">
-                  <button mat-menu-item (click)="openModal('addproduct')">Adicionar</button>
-                  <button mat-menu-item (click)="openModal('removeproduct')">Remover</button>
-                  <button mat-menu-item (click)="openModal('updateproduct')">Atualizar</button>
-                  <button mat-menu-item (click)="openModal('productreport')">Relatório Jogos</button>
-                </mat-menu>
-                <button  class="btn btn-light ms-1" [matMenuTriggerFor]="menuUser" *ngIf="userIsAdmin()">Usuario</button>
-                <mat-menu  #menuUser="matMenu">
-                  <button mat-menu-item (click)="openModal('adduser')">Adicionar</button>
-                  <button mat-menu-item (click)="openModal('remove-user')">Remover</button>
-                  <button mat-menu-item (click)="openModal('update-user')">Atualizar</button>
-                  <button mat-menu-item (click)="openModal('empreport')">Relatório Func</button>
-                  <button mat-menu-item (click)="openModal('clireport')">Relatório Cli</button>
-                </mat-menu>
               </form>
         </div>
         <div id="button_encasing" class="col-sm-5 d-flex flex-row-reverse">
           <button class="btn btn-light me-2" *ngIf="checkIfUserIsNotLoggedIn()" (click)="openModal('register-user')">Registrar</button>
             <button class="btn btn-light me-2" *ngIf="checkIfUserIsNotLoggedIn()" routerLink="/user-login" routerLinkActive="activate">Entrar</button>
-            <span class="badge fst-italic" *ngIf="!checkIfUserIsNotLoggedIn()" >Olá, {{decodeJWT().sub}}</span>
+            <button class="btn btn-outline-secondary" [matMenuTriggerFor]="configMenu" *ngIf="!checkIfUserIsNotLoggedIn()">Olá , {{decodeJWT().sub}}</button>
+            <mat-menu #configMenu="matMenu">
+              <button mat-menu-item (click)="logOutUserAndRedirectToLoginPage()">Sair</button>
+            </mat-menu>
             <button class="btn btn-primary me-2" routerLink="/cart" routerLinkActive="activate">
               <fa-icon [icon]="faCartPlus" class="fa-1x"></fa-icon>
               <div class="badge bg-danger custom-font-10-size">{{totalCartItems}}</div>
