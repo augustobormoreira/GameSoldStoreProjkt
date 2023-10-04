@@ -13,11 +13,13 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,6 +39,7 @@ public class Card {
         this.cardOwner = cardOwner;
         this.expiryDate = expiryDate;
         this.cardPassword = password;
+        this.cardType = cardType;
     }
 
 }

@@ -47,30 +47,40 @@
         <div class="modal-header">
             <h4 class="modal-title white" id="modal-basic-title">Informações do pagamento</h4>
         </div>
-        <form #product="ngForm" >
-        <div class="modal-body">
+        <form [formGroup]="cardForm"  (ngSubmit)="addNewOrder()">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Numero do cartao:</span>
-                        <input type="text" ngModel class="form-control"  name="productId" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Nome completo:</span>
-                        <input type="text" ngModel class="form-control"  name="productId" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Senha do cartao:</span>
-                        <input type="text" ngModel class="form-control"  name="productId" aria-describedby="basic-addon1">
-                    </div>
-                </div>
-              </div>
-        </div>
+              <div class="row flex-row">
+                  <mat-form-field>
+                      <mat-label>Select Card to Pay:</mat-label>
+                      <mat-select formControlName="cardSelected">
+                        <mat-option *ngFor="let curCard of card" [value]="curCard.cardNumber" (click)="populateFormWithCardSelectedInformation()" > {{curCard.cardNumber}} - {{curCard.cardType}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Card Number:</mat-label>
+                        <input ngModel class="form-control" formControlName="cardNumber" matInput>
+                    </mat-form-field>
+                    
+                    <mat-form-field>
+                        <mat-label>Card Owner:</mat-label>
+                        <input ngModel class="form-control" formControlName="cardOwner" matInput>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Card Type:</mat-label>
+                        <input ngModel class="form-control" formControlName="cardType" matInput>
+                    </mat-form-field>
         
-        <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="addNewOrder()">Finalizar</button>
-        </div>
-        </form>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-outline-dark" >Confirm</button>
+                </div>    
+             
+              
+              </div>
+            </div>
+        
+          </form>
     </div>
 </div>
 

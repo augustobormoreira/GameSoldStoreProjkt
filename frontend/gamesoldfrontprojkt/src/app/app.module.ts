@@ -14,6 +14,8 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table';
 import {MatListModule} from '@angular/material/list';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
 import { CartComponent } from './components/cart/cart.component';
@@ -40,6 +42,12 @@ import { UserPanelComponent } from './components/control-panel/user-panel/user-p
 import { GamePanelComponent } from './components/control-panel/game-panel/game-panel.component';
 import { AlluserscomponentComponent } from './components/control-panel/user-panel/alluserscomponent/alluserscomponent.component';
 import { AllgamescomponentComponent } from './components/control-panel/game-panel/allgamescomponent/allgamescomponent.component';
+import { OrderPanelComponent } from './components/control-panel/order-panel/order-panel.component';
+import { AllorderscomponentComponent } from './components/control-panel/order-panel/allorderscomponent/allorderscomponent.component';
+import { OrderService } from './service/order.service';
+import { UpdateOrderComponentComponent } from './components/orders/update-order/update-order-component/update-order-component.component';
+import { RegisterUserCardComponent } from './components/user-components/register-user-card/register-user-card.component';
+import { CardService } from './service/card.service';
 
 @NgModule({
   declarations: [
@@ -61,6 +69,10 @@ import { AllgamescomponentComponent } from './components/control-panel/game-pane
     GamePanelComponent,
     AlluserscomponentComponent,
     AllgamescomponentComponent,
+    OrderPanelComponent,
+    AllorderscomponentComponent,
+    UpdateOrderComponentComponent,
+    RegisterUserCardComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -73,6 +85,8 @@ import { AllgamescomponentComponent } from './components/control-panel/game-pane
     MatButtonModule,
     MatMenuModule,
     MatListModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     HttpClientModule,
     MatIconModule,
     FontAwesomeModule,
@@ -81,7 +95,7 @@ import { AllgamescomponentComponent } from './components/control-panel/game-pane
     ReactiveFormsModule,
     NgbModule
   ],
-  providers: [GameService, LoginService, { provide: HTTP_INTERCEPTORS, useClass: InterceptorInterceptor, multi: true }, SearchGameService, UserService, CartserviceService],
+  providers: [GameService, LoginService, { provide: HTTP_INTERCEPTORS, useClass: InterceptorInterceptor, multi: true }, SearchGameService, UserService, CartserviceService, OrderService, CardService],
   bootstrap: [AppComponent],
   entryComponents: [
     AddNewuserComponent

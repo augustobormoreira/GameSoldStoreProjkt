@@ -13,6 +13,7 @@
             <button class="btn btn-light me-2" *ngIf="checkIfUserIsNotLoggedIn()" routerLink="/user-login" routerLinkActive="activate">Entrar</button>
             <button class="btn btn-outline-secondary" [matMenuTriggerFor]="configMenu" *ngIf="!checkIfUserIsNotLoggedIn()">Olá , {{decodeJWT().sub}}</button>
             <mat-menu #configMenu="matMenu">
+              <button mat-menu-item (click)="openModal('register-card')">Add Payment Method</button>
               <button mat-menu-item (click)="logOutUserAndRedirectToLoginPage()">Sair</button>
             </mat-menu>
             <button class="btn btn-primary me-2" routerLink="/cart" routerLinkActive="activate">

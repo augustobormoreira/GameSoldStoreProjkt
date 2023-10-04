@@ -2,6 +2,7 @@ package gamesoldstoreprojkt.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.Model.Order;
 import gamesoldstoreprojkt.Model.OrderDTO;
@@ -36,9 +37,16 @@ public class OrderController {
 
     @PostMapping("/createOrder")
     public ResponseEntity<Order> addNewOrder(@RequestBody OrderDTO orderDTO) {
-        Optional<User> userBuyer = this.userService.findUserById(orderDTO.getIdUser());
+        Optional<User> userBuyer = this.userService.findByClientusername(orderDTO.getUserName());
         GameProduct [] idGamesToBuy = this.gameProductService.getGamesById(orderDTO.getIdBuyedGames());
-        Order orderToBeSaved = new Order(userBuyer.get() , idGamesToBuy); 
+        
+        if(orderDTO.getPaymentMethod().equalsIgnoreCase("credit")){
+            Client updatedClient = (Client) userBuyer.get();
+            updatedClient.setClientDebt(Double.parseDouble(orderDTO.getOrderPrice()));
+            this.userService.addUser(updatedClient);
+        }
+        Order orderToBeSaved = new Order(userBuyer.get(), idGamesToBuy, orderDTO.getOrderIsPayed() , Double.parseDouble(orderDTO.getOrderPrice()), orderDTO.getPaymentMethod());
+
         Order newOrder = this.orderService.createOrder(orderToBeSaved);
         return new ResponseEntity<>(newOrder, HttpStatus.OK);
     }
@@ -55,14 +63,19 @@ public class OrderController {
         return new ResponseEntity<>(newOrder, HttpStatus.OK);
     }
 
-    @PutMapping("/updateOrder")
-    public ResponseEntity<Order> updateOrderById(@RequestBody Order order) throws Exception{
-        if(this.orderService.findOrderById(order.getOrderId()) != null) {
-            Order newOrder = this.orderService.createOrder(order);
-            return new ResponseEntity<Order>(newOrder, HttpStatus.OK);
-        }else{
-            throw new Exception();
+    @PutMapping("/updateOrder/{id}")
+    public ResponseEntity<Order> updateOrderById(@PathVariable("id") Long orderId, @RequestBody OrderDTO orderDTO) {
+        Order orderToBeUpdated = this.orderService.findOrderById(orderId).get();
+        orderToBeUpdated.setOrderIsPayed(orderDTO.getOrderIsPayed());
+        if(orderToBeUpdated.getPaymentMethod().equalsIgnoreCase("credit")){
+            Client clientBuyer = (Client) this.userService.findUserById(Long.toString(orderToBeUpdated.getClientBuyer().getIdentificationNumber())).get();
+            clientBuyer.setClientDebt(orderToBeUpdated.getOrderPrice() * -1);
+            this.userService.addUser(clientBuyer);
         }
+
+        this.orderService.createOrder(orderToBeUpdated);
+
+        return new ResponseEntity<Order>(orderToBeUpdated, HttpStatus.OK);
     }
 
     

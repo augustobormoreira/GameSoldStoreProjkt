@@ -1,0 +1,36 @@
+
+<div class="mat-dialog-content inheritWidthSize">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Update Sale</h4>
+    </div>
+    <div class="modal-body">
+      <div class="container-fluid">
+        <div class="row flex-row">
+          <mat-label>Sale Id:</mat-label>
+          <input ngModel class="form-control" [(ngModel)]="saleId" matInput >
+        </div>
+      </div>
+      <form [formGroup]="orderForm" (ngSubmit)="updateOrder()">
+      <div class="container-fluid">
+        <div class="row flex-row">
+          <mat-form-field>
+            <mat-label>Order Status:</mat-label>
+            <mat-select formControlName="orderStatus">
+              <mat-option value="true" >Payed</mat-option>
+              <mat-option value="false" >Still awaiting payment</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-dark" >Update</button>
+          </div>    
+       
+        
+        </div>
+      </div>
+  
+    </form>
+    </div>
+   
+  
+  
+  

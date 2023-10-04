@@ -5,18 +5,9 @@ import { SearchGameService } from 'src/app/service/searchGame.service';
 import jwtDecode from 'jwt-decode';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
-import { UserEmployee } from '../../model/UserEmployee';
-import { User } from '../../model/User';
-import { environment } from 'src/environments/environment';
-import { RemoveUserComponent } from '../../user-components/remove-user/remove-user.component';
-import { UpdateProductComponent } from '../../product-components/update-product/update-product.component';
-import { AddProductComponent } from '../../product-components/add-product/add-product.component';
-import { RemoveProductComponent } from '../../product-components/remove-product/remove-product.component';
-import { AddNewuserComponent } from '../../user-components/add-newuser/add-newuser.component';
 import { RegisterUserComponent } from '../../user-components/register-user/register-user.component';
-import { UpdateUserComponent } from '../../user-components/update-user/update-user.component';
 import { LoginService } from 'src/app/service/login.service';
-import { Router } from '@angular/router';
+import { RegisterUserCardComponent } from '../../user-components/register-user-card/register-user-card.component';
 @Component({
   selector: 'nav-bar',
   templateUrl: './nav.component.html',
@@ -29,12 +20,18 @@ export class NavComponent implements OnInit {
   constructor(private cartService: CartserviceService, private searchGameService: SearchGameService, public dialog: MatDialog, private httpClient: HttpClient, private loginService: LoginService){};
 
   openModal(modalName: string){
-    if(modalName === 'register-user'){
+     if(modalName === 'register-user'){
         const dialogConfig = new MatDialogConfig();
         dialogConfig.id = 'modal-registeruser';
         dialogConfig.height = '800px';
         dialogConfig.width = '1000px';
         const dialogRef = this.dialog.open(RegisterUserComponent, dialogConfig);
+      } else if(modalName === 'register-card'){
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.id = 'modal-registercard';
+        dialogConfig.height = '800px';
+        dialogConfig.width = '1000px';
+        const dialogRef = this.dialog.open(RegisterUserCardComponent, dialogConfig);
       }
 
     }

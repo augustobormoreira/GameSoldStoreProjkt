@@ -4,6 +4,7 @@ import { Game } from '../components/model/Game';
 import { HttpClient } from '@angular/common/http';
 import { OrderDTO } from '../components/model/OrderDTO';
 import { environment } from 'src/environments/environment';
+import { OrderService } from './order.service';
 
 /* Service responsible for all cart methods related, receives an httpClient via dependency injection */
 @Injectable({
@@ -56,13 +57,11 @@ export class CartserviceService {
 
   
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private orderService: OrderService) { }
 
 
   /* This is a post method. Receives an OrderDTO as parameter and sends it to be added into the database */
   addNewOrder(orderDTO: OrderDTO){
-    this.httpClient.post(`${environment.API_URL}/orders/createOrder`, orderDTO).subscribe((data) => {
-      console.log(data);
-    })
+    this.orderService.addNewOrder(orderDTO);
   }
 }

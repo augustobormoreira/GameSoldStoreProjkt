@@ -27,11 +27,21 @@ public class Order {
         name = "order_products",
         joinColumns = @JoinColumn(name = "orderId"),
         inverseJoinColumns = @JoinColumn(name = "productId")
-    )
+    )  
     private GameProduct[] products;
+    private Double orderPrice;
+    private boolean orderIsPayed; 
+    private String paymentMethod;
 
-    public Order(User clientBuyer, GameProduct [] products){
+    public Order(User clientBuyer, GameProduct [] products, boolean orderIsPayed, double orderPrice, String paymentMethod){
         this.clientBuyer = clientBuyer;
         this.products = products;
+        this.orderIsPayed = orderIsPayed;
+        this.orderPrice = orderPrice;
+        this.paymentMethod = paymentMethod;
+    }
+
+    public boolean getOrderIsPayed(){
+        return orderIsPayed;
     }
 }

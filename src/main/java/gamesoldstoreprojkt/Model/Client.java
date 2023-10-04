@@ -22,9 +22,7 @@ import lombok.ToString;
 public class Client extends User {
     private String preferredPaymentMethod;
     private boolean clientIsBlacklisted;
-    private int clientDebt;
-    @OneToMany(fetch = FetchType.LAZY)
-    private Card [] cards;
+    private Double clientDebt = 0.0;
 
     public void setToUpdatedValues(Client client){
         this.setName(client.getName());
@@ -33,10 +31,17 @@ public class Client extends User {
         this.setStreetName(client.getStreetName());
         this.setUsername(client.getUsername());
         this.setPassword(client.getPassword());
-        this.setCards(client.getCards());
         this.setRole(UserRoles.USER);
         this.setPreferredPaymentMethod(client.getPreferredPaymentMethod());
         this.setClientIsBlacklisted(client.isClientIsBlacklisted());
-        this.setClientDebt(client.getClientDebt());      
+        this.setEqualsClientDebt(client.getClientDebt());      
+    }
+
+    private void setEqualsClientDebt(Double clientDebt) {
+        this.clientDebt = clientDebt;
+    }
+
+    public void setClientDebt(Double receivedDebt){
+        this.clientDebt += receivedDebt;
     }
 }

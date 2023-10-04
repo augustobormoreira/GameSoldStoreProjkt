@@ -15,6 +15,9 @@ import { UserPanelComponent } from './components/control-panel/user-panel/user-p
 import { GamePanelComponent } from './components/control-panel/game-panel/game-panel.component';
 import { AlluserscomponentComponent } from './components/control-panel/user-panel/alluserscomponent/alluserscomponent.component';
 import { AllgamescomponentComponent } from './components/control-panel/game-panel/allgamescomponent/allgamescomponent.component';
+import { OrderPanelComponent } from './components/control-panel/order-panel/order-panel.component';
+import { AllorderscomponentComponent } from './components/control-panel/order-panel/allorderscomponent/allorderscomponent.component';
+import { UpdateOrderComponentComponent } from './components/orders/update-order/update-order-component/update-order-component.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'user-login', pathMatch: 'full'},
@@ -88,6 +91,24 @@ const routes: Routes = [
           {
             path: 'update-game/:id',
             component: UpdateProductComponent
+          }
+        ]
+      },
+      {
+        path: 'order-panel',
+        component: OrderPanelComponent,
+        children: [
+          {
+            path: '',
+            component: AllorderscomponentComponent
+          },
+          {
+            path: 'update-order',
+            component: UpdateOrderComponentComponent
+          },
+          {
+            path: 'update-order/:id',
+            component: UpdateOrderComponentComponent
           }
         ]
       }

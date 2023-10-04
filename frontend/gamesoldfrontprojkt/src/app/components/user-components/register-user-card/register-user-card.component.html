@@ -1,0 +1,50 @@
+
+<div class="mat-dialog-content inheritWidthSize">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add Card</h4>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="cardForm" (ngSubmit)="addNewCard()" >
+      <div class="container-fluid">
+        <div class="row flex-row">
+          <mat-form-field>
+            <mat-label>Card Number:</mat-label>
+            <input ngModel class="form-control" formControlName="cardNumber" matInput>
+          </mat-form-field>
+          <mat-form-field>
+          <mat-label>Owner's Name:</mat-label>
+            <input ngModel class="form-control" formControlName="userName" matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="expiryDate" [(ngModel)]="expiryDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+            <mat-form-field>
+                <mat-label>Card Password:</mat-label>
+                <input ngModel class="form-control" formControlName="cardPassword" matInput>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Card Type:</mat-label>
+                <mat-select formControlName="cardType">
+                  <mat-option value="debit" >Debito</mat-option>
+                  <mat-option value="credit" >Credito</mat-option>
+                </mat-select>
+              </mat-form-field>
+  
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-dark" >Add</button>
+          </div>    
+       
+        
+        </div>
+      </div>
+  
+    </form>
+    </div>
+   
+  
+  
+  

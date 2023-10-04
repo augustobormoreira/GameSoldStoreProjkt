@@ -50,8 +50,8 @@ public class UserService {
         return this.userRepository.findByusername(username);
     }
 
-    public Optional<Client> findByClientusername(String username){
-        return this.userRepository.findUserByusername(username);
+    public Optional<User> findByClientusername(String username){
+        return this.userRepository.getByusername(username);
     }
     
     public User removeUserById(String userId){

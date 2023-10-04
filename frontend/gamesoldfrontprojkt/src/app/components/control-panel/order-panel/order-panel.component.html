@@ -1,0 +1,19 @@
+<div class="body d-flex flex-column">
+    <div class="nav-options d-flex flex-row border-bottom border-dark">
+        <div class="col-sm-6 align-items-center d-flex flex-row">
+            <span class="fs-4">Sales:</span>
+        </div>
+        <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <button type="button" class="btn btn-outline-warning" routerLink="all-orders">All </button>
+        </div>
+        <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <button type="button" class="btn btn-outline-secondary" >Report</button>
+        </div>
+        <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <button type="button" class="btn btn-outline-primary" routerLink="update-order">Update</button>
+        </div>
+    </div>
+    <div class="body-display">
+        <router-outlet></router-outlet>
+    </div>
+</div>
