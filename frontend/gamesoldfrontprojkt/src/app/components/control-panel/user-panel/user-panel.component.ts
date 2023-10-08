@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/service/user.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -9,21 +10,13 @@ import { environment } from 'src/environments/environment';
 })
 export class UserPanelComponent implements OnInit {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private userService: UserService) { }
 
   ngOnInit(): void {
   }
 
   downloadUsersReport(){
-    this.httpClient.get(`${environment.API_URL}/users/users_report`, {responseType: 'blob'}).subscribe((data) => {
-      var blob = new Blob([data], {type: 'application/pdf'});
-
-      var downloadUrl = window.URL.createObjectURL(data);
-      var link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = "users_report.pdf";
-      link.click();
-    })
+    this.userService.getUserReport();
   }
 
 }

@@ -24,6 +24,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.Employee;
 import gamesoldstoreprojkt.Model.GameProduct;
+import gamesoldstoreprojkt.Model.Order;
 
 public class DatabasePDFService<T> {
  
@@ -250,11 +251,101 @@ public class DatabasePDFService<T> {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
+    public static ByteArrayInputStream salesPDFReport(List<Order> sales) {
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+ 
+        try {
+ 
+            PdfWriter.getInstance(document, out);
+            document.open();
+ 
+            // Add Content to PDF file ->
+           Font fontHeader = FontFactory.getFont(FontFactory.TIMES_BOLD, 22);
+            Font fontTimeAndDate = FontFactory.getFont(FontFactory.TIMES_BOLD, 18);
+            Date currentDate = new Date();
+            Paragraph reportTitle = new Paragraph("Sales Report", fontHeader);
+            Paragraph reportDateAndTime = new Paragraph("Date and  Time = " + currentDate.toString(), fontTimeAndDate);
+            reportDateAndTime.setAlignment(Element.ALIGN_CENTER);
+            reportTitle.setAlignment(Element.ALIGN_CENTER);
+            document.add(reportTitle);
+            document.add(reportDateAndTime);
+            document.add(Chunk.NEWLINE);
+ 
+            PdfPTable table = new PdfPTable(5);
+            // Add PDF Table Header ->
+            Stream.of("ID", "Order Status", "Price", "Products", "Buyer").forEach(headerTitle -> {
+                PdfPCell header = new PdfPCell();
+                Font headFont = FontFactory.getFont(FontFactory.TIMES_BOLD);
+                header.setBackgroundColor(Color.CYAN);
+                header.setHorizontalAlignment(Element.ALIGN_CENTER);
+                header.setBorderWidth(2);
+                header.setPhrase(new Phrase(headerTitle, headFont));
+                table.addCell(header);
+            });
+ 
+            for (Order order : sales) {
+                PdfPCell idCell = new PdfPCell(new Phrase(order.getOrderId().toString()));
+                idCell.setPaddingLeft(4);
+                idCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                idCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(idCell);
+
+                PdfPCell orderStatusCell = new PdfPCell(new Phrase(returnPayedIfTrueElseReturnNotPayed(order.getOrderIsPayed())));
+                orderStatusCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                orderStatusCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                orderStatusCell.setPaddingRight(4);
+                table.addCell(orderStatusCell);
+ 
+                PdfPCell priceCell = new PdfPCell(new Phrase(String.valueOf(order.getOrderPrice())));
+                priceCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                priceCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                priceCell.setPaddingRight(4);
+                table.addCell(priceCell);
+ 
+                PdfPCell productsCell = new PdfPCell(new Phrase(returnStringIfArrayNotNull(order.getProducts())));
+                productsCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                productsCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                productsCell.setPaddingRight(4);
+                table.addCell(productsCell);
+
+                PdfPCell buyerCell = new PdfPCell(new Phrase(order.getClientBuyer().getName()));
+                buyerCell.setPaddingLeft(4);
+                buyerCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                buyerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(buyerCell);
+            }
+            document.add(table);
+ 
+            document.close();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+ 
+        return new ByteArrayInputStream(out.toByteArray());
+    }
 
     public static String  returnStringIfArrayNotNull(String [] tags){ 
         if(tags == null) return "No tags found";
 
         return Arrays.toString(tags);
+    }
+
+    public static String returnStringIfArrayNotNull(GameProduct [] products){
+        if(products == null) return "No products found";
+
+        final String [] arrayGameNames = new String[products.length]; 
+        for(int i = 0; i < products.length; i++) {
+            arrayGameNames[i] = products[i].getProductName();
+        }
+
+        return Arrays.toString(arrayGameNames);
+    }
+
+    public static String returnPayedIfTrueElseReturnNotPayed(boolean orderStatus){
+        if(orderStatus) return "Payed";
+
+        return "Awaiting Payment";
     }
 
 

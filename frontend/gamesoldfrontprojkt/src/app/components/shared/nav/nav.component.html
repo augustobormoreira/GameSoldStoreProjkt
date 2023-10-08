@@ -11,7 +11,7 @@
         <div id="button_encasing" class="col-sm-5 d-flex flex-row-reverse">
           <button class="btn btn-light me-2" *ngIf="checkIfUserIsNotLoggedIn()" (click)="openModal('register-user')">Registrar</button>
             <button class="btn btn-light me-2" *ngIf="checkIfUserIsNotLoggedIn()" routerLink="/user-login" routerLinkActive="activate">Entrar</button>
-            <button class="btn btn-outline-secondary" [matMenuTriggerFor]="configMenu" *ngIf="!checkIfUserIsNotLoggedIn()">Olá , {{decodeJWT().sub}}</button>
+            <button class="btn btn-outline-secondary" [matMenuTriggerFor]="configMenu" *ngIf="!checkIfUserIsNotLoggedIn()">Olá , {{userName}}</button>
             <mat-menu #configMenu="matMenu">
               <button mat-menu-item (click)="openModal('register-card')">Add Payment Method</button>
               <button mat-menu-item (click)="logOutUserAndRedirectToLoginPage()">Sair</button>

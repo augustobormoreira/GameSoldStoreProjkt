@@ -6,6 +6,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { UserClient } from '../../model/UserClient';
 import { UserEmployee } from '../../model/UserEmployee';
 
+/**
+ * This component is responsible for the adding of a new user, either employee or client to the server
+ */
 @Component({
   selector: 'app-add-newuser',
   templateUrl: './add-newuser.component.html',
@@ -34,17 +37,20 @@ export class AddNewuserComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /* Simple method to check if the formControl userType informed by the user is a client */
   isClient(){
     if(this.userForm.get('userType')?.value==="client") return true;
     return false;
   }
 
+  /* Simple method to check if the formControl userType informed by the user is an employee */
   isEmployee(){
     if(this.userForm.get('userType')?.value==="employee") return true;
     return false;
   }
   
-
+ /* Upon submit of the user register form, this method is called. It uses the functions isClient and isEmployee to create the apropriate type of user and calls
+ the specified method to add the user. */
   addNewUser(){
     if(this.isEmployee()){
       const newEmployee = this.createEmployee();
@@ -56,15 +62,16 @@ export class AddNewuserComponent implements OnInit {
     }
   }
 
-
+/* This method adds an employee */
   addNewEmployee(employee: UserEmployee){
     console.log(this.userService.addNewEmployee(employee));
   }
-
+/* This method adds a client */
   addNewClient(client: UserClient){
     console.log(this.userService.addNewClient(client));
   }
 
+  /* This method returns a client using the information on the form filled by the user */
   createClient(){
     const newClient: UserClient =  new UserClient(
       this.userForm.get('userRName')?.value,
@@ -81,6 +88,7 @@ export class AddNewuserComponent implements OnInit {
     return newClient;
   }
 
+  /* This method returns an employee using the information on the form filled by the user */
   createEmployee(){
     const newEmployee: UserEmployee =  new UserEmployee(
       this.userForm.get('userRName')?.value,

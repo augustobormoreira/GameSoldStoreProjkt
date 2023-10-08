@@ -18,6 +18,7 @@ import { AllgamescomponentComponent } from './components/control-panel/game-pane
 import { OrderPanelComponent } from './components/control-panel/order-panel/order-panel.component';
 import { AllorderscomponentComponent } from './components/control-panel/order-panel/allorderscomponent/allorderscomponent.component';
 import { UpdateOrderComponentComponent } from './components/orders/update-order/update-order-component/update-order-component.component';
+import { AuthGuard } from './service/authguard';
 
 const routes: Routes = [
   {path: '', redirectTo: 'user-login', pathMatch: 'full'},
@@ -103,6 +104,10 @@ const routes: Routes = [
             component: AllorderscomponentComponent
           },
           {
+            path: 'all-orders',
+            component: AllorderscomponentComponent
+          },
+          {
             path: 'update-order',
             component: UpdateOrderComponentComponent
           },
@@ -112,7 +117,8 @@ const routes: Routes = [
           }
         ]
       }
-    ]
+    ],
+    canActivate: [AuthGuard]
   }
 ];
 

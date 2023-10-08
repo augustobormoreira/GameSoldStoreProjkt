@@ -1,12 +1,11 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
 import { GameService } from 'src/app/service/game.service';
 import { Game } from '../../model/Game';
-
+/**
+ * This component is responsible for adding a new product to the database.
+ */
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
@@ -23,22 +22,26 @@ export class AddProductComponent implements OnInit {
     }
   );
 
+  /* This is an array of game categories */
   categories: string[] = ['Ação', 'Story-Driven', 'RPG', 'Hack n Slash'];
 
   faSquarePlus = faSquarePlus;
 
-  constructor(private modalService: NgbModal, private httpClient: HttpClient, private gameService: GameService) { }
+  /* Upon construction, injects a gameService via dependency injection */
+  constructor(private gameService: GameService) { }
 
   ngOnInit(): void {
   }
 
+  /* This method is called when the form is submitted, it creates a new product using the local method createNewProduct() and the addNewGame() method from the gameService
+  service. */
   addNewProduct(){
-    console.log(this.productForm.get('productCategories')?.value);
     const newProduct: Game = this.createNewProduct();
     this.gameService.addNewGame(newProduct);
   } 
 
 
+  /* This is the method responsible for creating a new game, it creates a new game using the current productForm values */
   createNewProduct(): Game{
       return new Game(
         this.productForm.get('productName')?.value,

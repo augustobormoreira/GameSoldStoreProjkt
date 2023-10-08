@@ -21,7 +21,7 @@ export class UserService {
         
     }
 
-
+    /* This method gets all the users on the database and returns it as an observable */
     getAllUsers() {
         return this.httpClient.get(`${environment.API_URL}/users/allUsers`);
     }
@@ -29,36 +29,69 @@ export class UserService {
     /* Method adds new employee to database, receives a UserEmployee as parameter */
     addNewEmployee(user: UserEmployee){
         this.httpClient.post(`${environment.API_URL}/users/addEmployee`, user).subscribe((result) =>{
-           console.log(result); 
+           if(result){
+                alert("Employee added with success!");
+           }else{
+                alert("Something went wrong when adding employee!");
+           }
         });
     }
 
     /* Method adds new client to database, receives a UserClient as parameter */
     addNewClient(user: UserClient){
         this.httpClient.post(`${environment.API_URL}/users/addClient`, user).subscribe((result) =>{
-            console.log(result); 
+            if(result){
+                alert("Client added with success!");
+            }else{
+                alert("Something went wrong when adding the client!");
+            }
          });
     }
 
     /* Method deletes user on database, receives a id as number as parameter */
     deleteExistingEmployee(userId: number){
         this.httpClient.delete(`${environment.API_URL}/users/deleteUser/${userId}`).subscribe((result) => {
-            console.log(result);
+            if(result){
+                alert("User deleted with success!");
+            }else{
+                alert("Something went wrong when deleting user!");
+            }
         })
     }
 
     /* Method updates existing client on database, receives the client id and an object UserClient */
     updateExistingClient(userId: String, updatedClient: UserClient){
         this.httpClient.put(`${environment.API_URL}/users/updateClient/${userId}`, updatedClient).subscribe((result) => {
-            console.log(result);
+            if(result){
+                alert("Client updated with success!");
+            }else{
+                alert("Something went wrong when updating client!");
+            }
         })
     }
 
     /* Method updates existing employee on database, receives the employee id and an object UserEmployee */
     updateExistingEmployee(userId: String, updatedEmployee: UserEmployee){
         this.httpClient.put(`${environment.API_URL}/users/updateEmployee/${userId}`, updatedEmployee).subscribe((result) => {
-            console.log(result);
+            if(result){
+                alert("Employee updated with success!");
+            }else{
+                alert("Something went wrong when updating employee!");
+            }
         })
+    }
+
+    /* This method gets from the backend a pdf report of all the users in the database , turns into a pdf file and downloads it to the user */
+    getUserReport(){
+        this.httpClient.get(`${environment.API_URL}/users/users_report`, {responseType: 'blob'}).subscribe((data) => {
+            var blob = new Blob([data], {type: 'application/pdf'});
+      
+            var downloadUrl = window.URL.createObjectURL(data);
+            var link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = "users_report.pdf";
+            link.click();
+          });
     }
 
     

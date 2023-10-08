@@ -14,7 +14,7 @@ export class AllorderscomponentComponent implements OnInit {
   faTrash = faTrash;
   faFile = faFile;
   public orderList: any = [];
-  displayedColumns: string[] = ['ID', 'buyer', 'gamesBought', 'update', 'remove']; 
+  displayedColumns: string[] = ['ID', 'buyer', 'gamesBought', 'update']; 
   constructor(private orderService: OrderService, private route: Router) { }
 
   ngOnInit(): void {

@@ -6,7 +6,9 @@ import { User } from '../../model/User';
 import { UserClient } from '../../model/UserClient';
 import { UserEmployee } from '../../model/UserEmployee';
 import { ActivatedRoute, Router } from '@angular/router';
-
+/**
+ * This component is responsible for the updating of a user, should an admin decide to.
+ */
 @Component({
   selector: 'app-update-user',
   templateUrl: './update-user.component.html',
@@ -32,7 +34,32 @@ export class UpdateUserComponent implements OnInit {
   });
   passwordHide = true;
   shouldButtonNotBeEnabled = true;
+  
+  /* Injects a userService, activatedRoute and router via dependency injection */
+  constructor(private userService: UserService, private activatedRoute: ActivatedRoute, private router: Router) { 
+   }
+/* On component initialization, retrieves the userID sent via route even it doesn't exist. Fills the formControls userId and userType with the route parameters id and role.
+  Afterwards a verification is called, if role isn't null and equals ADMIN the userType formcontrol and routeUserType is set with the value employee and calls for the method
+  selectUserToUpdate, and if the role isn't null and equals USER, the userType formcontrol and routeUserType is set with the value client and also calls for the method
+  selectUserToUpdate
+   */
+  ngOnInit(): void {
+    this.routeUserId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.userForm.get('userId')?.setValue(this.activatedRoute.snapshot.paramMap.get('id'));
+    this.userForm.get('userType')?.setValue(this.activatedRoute.snapshot.paramMap.get('role'));
+    if(this.activatedRoute.snapshot.paramMap.get('role') === 'ADMIN' && (this.activatedRoute.snapshot.paramMap.get('role')!=null || this.activatedRoute.snapshot.paramMap.get('id') != null)){
+      this.userForm.get('userType')?.setValue('employee');
+      this.routeUserType = 'employee';
+      this.selectUserToUpdate();
+    }else if(this.activatedRoute.snapshot.paramMap.get('role') === 'USER'  && (this.activatedRoute.snapshot.paramMap.get('role')!=null || this.activatedRoute.snapshot.paramMap.get('id') != null)){
+      this.userForm.get('userType')?.setValue('client');
+      this.routeUserType = 'client';
+      this.selectUserToUpdate();
+    }
+  }
 
+  /* This method calls the for method getUserById from userService using the userId formcontrol value. After retrieval of the result depending on the results of the methods
+  isEmployee and isClient fills the form with specified properties. */
   selectUserToUpdate(){
     this.userService.getUserById(this.userForm.get('userId')?.value).subscribe((result) => {
       if(this.isEmployee()){
@@ -47,6 +74,8 @@ export class UpdateUserComponent implements OnInit {
     });
   }
 
+  /* Depending if the formControl userType is client or employee, a new employee or client is created using the formcontrol values and afterwars calls for the methods
+  updateExistingClient or updateExistingEmployee which requires the userId and the newly created client or employee as parameters */
   updateConfirmedUser(){  
       if(this.isClient()){
         const updatedClient = this.createClient();
@@ -57,16 +86,19 @@ export class UpdateUserComponent implements OnInit {
       }
   }
 
+  /* Simple method to check if userType is client */
   isClient(){
     if(this.userForm.get('userType')?.value==="client") return true;
     return false;
   }
 
+  /* Simple method to check if userType is employee*/
   isEmployee(){
     if(this.userForm.get('userType')?.value==="employee") return true;
     return false;
   }
 
+  /* This method fills the formcontrol values of USER */
   setUserFormWithUserProperties(user: User) {
     this.userForm.get('userRName')?.setValue(user.name);
     this.userForm.get('userStreetNumber')?.setValue(user.streetNumber);
@@ -76,6 +108,7 @@ export class UpdateUserComponent implements OnInit {
     this.userForm.get('userPassword')?.setValue(user.password);
   }
 
+  /* This method fills the formcontrol values of CLIENT */
   setUserFormWithClientProperties(user: UserClient){
     this.userForm.get('userType')?.value === "client";
     this.userForm.get('preferredPaymentMethod')?.setValue(user.preferredPaymentMethod);
@@ -87,20 +120,24 @@ export class UpdateUserComponent implements OnInit {
     this.userForm.get('clientDebt')?.setValue(user.clientDebt);
   }
 
+  /* This method fills the formcontrol values of EMPLOYEE/ADMIN */
   setUserFormWithEmployeeProperties(user: UserEmployee){
     this.userForm.get('userType')?.value === "employee";
     this.userForm.get('jobRole')?.setValue(user.jobRole);
     this.userForm.get('empSalary')?.setValue(user.salary);
   }
 
+  /* Enables the button for form submit */
   buttonEnabler(){
     return this.shouldButtonNotBeEnabled;
   }
 
+  /* Disables the button for form submit */
   disableButton(){
     this.shouldButtonNotBeEnabled = true;
   }
 
+  /* Returns new client using form control values */
   createClient(){
     const newClient: UserClient =  new UserClient(
       this.userForm.get('userRName')?.value,
@@ -117,6 +154,7 @@ export class UpdateUserComponent implements OnInit {
     return newClient;
   }
 
+  /* Return new employee using form control values */
   createEmployee(){
     const newEmployee: UserEmployee =  new UserEmployee(
       this.userForm.get('userRName')?.value,
@@ -134,23 +172,6 @@ export class UpdateUserComponent implements OnInit {
   }
 
 
-  constructor(private userService: UserService, private activatedRoute: ActivatedRoute, private router: Router) { 
-   }
-
-  ngOnInit(): void {
-    this.routeUserId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.userForm.get('userId')?.setValue(this.activatedRoute.snapshot.paramMap.get('id'));
-    this.userForm.get('userType')?.setValue(this.activatedRoute.snapshot.paramMap.get('role'));
-    if(this.activatedRoute.snapshot.paramMap.get('role') === 'ADMIN' && (this.activatedRoute.snapshot.paramMap.get('role')!=null || this.activatedRoute.snapshot.paramMap.get('id') != null)){
-      this.userForm.get('userType')?.setValue('employee');
-      this.routeUserType = 'employee';
-      this.selectUserToUpdate();
-    }else if(this.activatedRoute.snapshot.paramMap.get('role') === 'USER'  && (this.activatedRoute.snapshot.paramMap.get('role')!=null || this.activatedRoute.snapshot.paramMap.get('id') != null)){
-      this.userForm.get('userType')?.setValue('client');
-      this.routeUserType = 'client';
-      this.selectUserToUpdate();
-    }
-  }
 
 }
 

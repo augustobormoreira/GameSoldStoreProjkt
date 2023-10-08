@@ -7,6 +7,7 @@ import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.Model.Order;
 import gamesoldstoreprojkt.Model.OrderDTO;
 import gamesoldstoreprojkt.Model.User;
+import gamesoldstoreprojkt.service.DatabasePDFService;
 import gamesoldstoreprojkt.service.GameProductService;
 import gamesoldstoreprojkt.service.OrderService;
 import gamesoldstoreprojkt.service.UserService;
@@ -15,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.AllArgsConstructor;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,6 +81,17 @@ public class OrderController {
         this.orderService.createOrder(orderToBeUpdated);
 
         return new ResponseEntity<Order>(orderToBeUpdated, HttpStatus.OK);
+    }
+
+    @GetMapping("/orders_report")
+    public ResponseEntity<InputStreamResource> turnListOfOrdersIntoPdfOutput(){
+        List<Order> allOrders = this.orderService.getAllOrders();
+        ByteArrayInputStream bis = DatabasePDFService.salesPDFReport(allOrders);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", "inline; filename=teste.pdf");
+        return ResponseEntity.ok().headers(httpHeaders).contentType(MediaType.APPLICATION_PDF)
+        .body(new InputStreamResource(bis));
     }
 
     

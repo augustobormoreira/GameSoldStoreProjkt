@@ -48,6 +48,8 @@ import { OrderService } from './service/order.service';
 import { UpdateOrderComponentComponent } from './components/orders/update-order/update-order-component/update-order-component.component';
 import { RegisterUserCardComponent } from './components/user-components/register-user-card/register-user-card.component';
 import { CardService } from './service/card.service';
+import { AuthGuard } from './service/authguard';
+import { TokenInfo } from './service/tokeninfo';
 
 @NgModule({
   declarations: [
@@ -95,7 +97,7 @@ import { CardService } from './service/card.service';
     ReactiveFormsModule,
     NgbModule
   ],
-  providers: [GameService, LoginService, { provide: HTTP_INTERCEPTORS, useClass: InterceptorInterceptor, multi: true }, SearchGameService, UserService, CartserviceService, OrderService, CardService],
+  providers: [GameService, LoginService, { provide: HTTP_INTERCEPTORS, useClass: InterceptorInterceptor, multi: true }, SearchGameService, UserService, CartserviceService, OrderService, CardService, AuthGuard, TokenInfo],
   bootstrap: [AppComponent],
   entryComponents: [
     AddNewuserComponent

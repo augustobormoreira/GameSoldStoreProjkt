@@ -1,12 +1,10 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Game } from '../components/model/Game';
-import { HttpClient } from '@angular/common/http';
 import { OrderDTO } from '../components/model/OrderDTO';
-import { environment } from 'src/environments/environment';
 import { OrderService } from './order.service';
 
-/* Service responsible for all cart methods related, receives an httpClient via dependency injection */
+/* Service responsible for all cart methods related, receives an orderService via dependency injection */
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +13,9 @@ export class CartserviceService {
   isRemoved: boolean = false;
   public productList = new BehaviorSubject<Array<Game>>([]);
   @Output() cartItemRemovedTriggerEvent = new EventEmitter<number>();
+  
 
+  constructor(private orderService: OrderService) { }
 
   /* This method returns the productList as an observable for other components to subscribe to */
   getProductList(){
@@ -29,6 +29,7 @@ export class CartserviceService {
     this.getTotalPrice();
   }
 
+  /* This method gets the total price of the cart items */
   getTotalPrice(){
     let totalAmmount = 0;
     this.myCart.map((cartItem: Game) => {
@@ -38,6 +39,7 @@ export class CartserviceService {
     return totalAmmount;
   }
 
+  /* This method iterates the myCart array and finds for the product given as a parameter to remove */
   removeCartItem(product: Game){
     this.myCart.map((cartItem: Game, index: number) => {
       if(product.productName.localeCompare(cartItem.productName) == 0 && !this.isRemoved){
@@ -50,15 +52,12 @@ export class CartserviceService {
     this.isRemoved = false;
   }
 
+
+  /* This method removes all the items from the cart. */
   removeAllItems(){
     this.myCart = [];
     this.productList.next(this.myCart);
   }
-
-  
-
-  constructor(private orderService: OrderService) { }
-
 
   /* This is a post method. Receives an OrderDTO as parameter and sends it to be added into the database */
   addNewOrder(orderDTO: OrderDTO){

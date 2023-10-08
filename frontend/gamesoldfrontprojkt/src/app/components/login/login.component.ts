@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, FormControl, AbstractControl, Validators } from
 import { UserDTO } from '../model/UserDTO';
 import { Router } from '@angular/router';
 import jwtDecode from 'jwt-decode';
+import { TokenInfo } from 'src/app/service/tokeninfo';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit {
   });
   submitted: boolean = false;
 
-  constructor(private loginService: LoginService, private formBuilder: FormBuilder, private route: Router) {
+  constructor(private loginService: LoginService, private formBuilder: FormBuilder, private route: Router, private tokenInfo: TokenInfo) {
     
    }
 
@@ -62,22 +63,12 @@ export class LoginComponent implements OnInit {
 
   /* Decode json web token received from the backend to see if the logged in user is an ADMIN */
   userIsAdmin(): boolean {
-    const userToken = this.decodeJWT();
+    const userToken = this.tokenInfo.decodeJWT();
     if(userToken != null && userToken.userIdAndName[1]=="ADMIN"){
       return true;
     }
 
     return false;
-  }
-
-
-  /* Decode json web token that is stored in sessionStorage */
-  decodeJWT(): any{
-    try {
-      return jwtDecode(sessionStorage.getItem('sessionToken')!);
-    }catch(Error){
-      return null;
-    }
   }
 
   /* Check if there is already an item named sessionToken in sessionStorage, if there is it means there's already a user logged in */

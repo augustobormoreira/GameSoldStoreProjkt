@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { GameService } from 'src/app/service/game.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -9,21 +10,13 @@ import { environment } from 'src/environments/environment';
 })
 export class GamePanelComponent implements OnInit {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private gameService: GameService) { }
 
   ngOnInit(): void {
   }
 
   downloadGameReport(){
-    this.httpClient.get(`${environment.API_URL}/games/gamesReport`, {responseType: 'blob'}).subscribe((data) => {
-      var blob = new Blob([data], {type: 'application/pdf'});
-
-      var downloadUrl = window.URL.createObjectURL(data);
-      var link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = "game_report.pdf";
-      link.click();
-    })
+    this.gameService.getGameReport();
   }
 
 }

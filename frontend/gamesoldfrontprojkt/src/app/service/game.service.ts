@@ -25,21 +25,46 @@ export class GameService {
     /* This is a post method. It receives a Game object as parameter and sends it to add on database.*/
     addNewGame(game: Game){
         this.httpClient.post(`${environment.API_URL}/games/addProduct`, game).subscribe((result) => {
-            console.log(result);
+            if(result){
+                alert("Game added with success!");
+            }else{
+                alert("Something went wrong when adding game!");
+            }
         })
     }
     
     /* This is a put method. It receives a Game object as parameter and sends it to be updated on database.  */
     updateGame(game: Game){
         this.httpClient.put(`${environment.API_URL}/games/updateProduct/${game.productId}`, game).subscribe((result) => {
-            console.log(result);
+            if(result){
+                alert("Game updated with success!");
+            }else{
+                alert("Something went wrong when updating game!");
+            }
         });
     }
 
     /* This is a delete method. It receives an ID as parameter and calls for a deletion on the database. */
     removeGame(productId: number){
         this.httpClient.delete(`${environment.API_URL}/games/removeProduct/${productId}`).subscribe((result) => {
-            console.log(result);
+            if(result){
+                alert("Game removed with success!");
+            }else{
+                alert("Something went wrong when removing game!");
+            }
         });
+    }
+
+    /* This method is responsible for getting a pdf report of games from the backend, afterwards it turns it into a pdf file and downloads it to the user. */
+    getGameReport(){
+        this.httpClient.get(`${environment.API_URL}/games/gamesReport`, {responseType: 'blob'}).subscribe((data) => {
+            var blob = new Blob([data], {type: 'application/pdf'});
+      
+            var downloadUrl = window.URL.createObjectURL(data);
+            var link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = "game_report.pdf";
+            link.click();
+          })
     }
 } 
