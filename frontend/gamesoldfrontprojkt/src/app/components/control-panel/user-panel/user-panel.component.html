@@ -4,22 +4,28 @@
             <span class="fs-5">Ações Usuários:</span>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+             <!--Upon route activation, redirects to the allusers component using the route all-users -->
             <button type="button" class="btn btn-outline-warning" routerLink="all-users">Todos</button>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <!--Upon click calls the local method downloadUsersReport()  -->
             <button type="button" class="btn btn-outline-secondary" (click)="downloadUsersReport()">Relatório</button>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+             <!--Upon route activation, redirects to addusercomponent using the route add-user -->
             <button type="button" class="btn btn-outline-success" routerLink="add-user">Adicionar</button>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <!--Upon route activation, redirects to the updateuser component using the route update-users -->
             <button type="button" class="btn btn-outline-primary" routerLink="update-user">Atualizar</button>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <!--Upon route activation, redirects to the removeuser component using the route remove-user -->
             <button type="button" class="btn btn-outline-danger" routerLink="remove-user">Remover</button>
         </div>
     </div>
     <div class="body-display">
+        <!-- This is the router outlet responsible for displaying the components activated via routerLink at the above section -->
         <router-outlet></router-outlet>
     </div>
 </div>

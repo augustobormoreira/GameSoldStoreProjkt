@@ -13,7 +13,6 @@ import { OrderService } from 'src/app/service/order.service';
   styleUrls: ['./update-order-component.component.css']
 })
 export class UpdateOrderComponentComponent implements OnInit {
-  orderToBeUpdated!: Order;
   saleId!: string;
   orderForm: FormGroup = new FormGroup(
     {
@@ -35,13 +34,12 @@ export class UpdateOrderComponentComponent implements OnInit {
 
 
   /* Retrieves an order using the method getPromiseOfOrderToBeUpdated(), afterwards we handle the promise and in case it was fulfilled we grab the "order" value returned to us,
-  store it into a local Order called orderToBeUpdated, change its status for the value in orderForm and call for the method updateOrder from orderService */
+   change its status for the value in orderForm and call for the method updateOrder from orderService */
   updateOrder(){
     const promisedOrderToBeUpdated = this.getPromiseOfOrderToBeUpdated();
     promisedOrderToBeUpdated.then((order) => {
-      this.orderToBeUpdated = order;
-      this.orderToBeUpdated.orderIsPayed = this.orderForm.get('orderStatus')?.value;
-      this.orderService.updateOrder(this.orderToBeUpdated.orderId, this.orderService.createNewOrderDTOFromOrder(this.orderToBeUpdated));
+      order.orderIsPayed = this.orderForm.get('orderStatus')?.value;
+      this.orderService.updateOrder(order.orderId, this.orderService.createNewOrderDTOFromOrder(order));
     }).catch((errorMessage) => {
       alert(errorMessage);
     })

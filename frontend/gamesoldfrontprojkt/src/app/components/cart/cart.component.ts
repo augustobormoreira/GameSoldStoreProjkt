@@ -3,8 +3,6 @@ import { CartserviceService } from 'src/app/service/cartservice.service';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { MatTable } from '@angular/material/table';
 import { OrderDTO } from '../model/OrderDTO';
-import { Game } from '../model/Game';
-import jwtDecode from 'jwt-decode';
 import { Card } from '../model/Card';
 import { CardService } from 'src/app/service/card.service';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -38,6 +36,7 @@ export class CartComponent implements OnInit {
     }
   );
 
+  /* Upon construction, receive a cartService, cardService and tokenInfo via dependency injection */
   constructor(private cartService: CartserviceService, private cardService: CardService, private tokenInfo: TokenInfo) { }
 
 
@@ -69,6 +68,7 @@ export class CartComponent implements OnInit {
     this.openFormToGetCardInformation();
   }
 
+  /* This method uses the current productList array of products to generate a new string array containing all products ids */
   createNewArrayWithProductsIds(): Array<string>{
     let newArray: Array<string> = new Array();;
     for(let i = 0; i < this.productList.length; i++){

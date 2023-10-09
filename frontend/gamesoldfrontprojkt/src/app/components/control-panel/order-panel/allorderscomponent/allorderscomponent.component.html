@@ -14,13 +14,16 @@
 
      <ng-container matColumnDef="gamesBought">
         <th mat-header-cell *matHeaderCellDef> Games </th>
-        <td mat-cell *matCellDef="let order" > {{ this.returnArrayWithAllGamesName(order    ) }} </td>
+        <td mat-cell *matCellDef="let order" > {{ this.returnArrayWithAllGamesName(order) }} </td>
       </ng-container>
 
 
      <ng-container matColumnDef="update">
        <th mat-header-cell *matHeaderCellDef> Editar </th>
-       <td mat-cell *matCellDef="let order"> <button class="btn btn-primary" (click)="navigateToRouteBySpecificUrlForUpdating(order.orderId)"><fa-icon [icon]="faFile"></fa-icon></button> </td>
+       <td mat-cell *matCellDef="let order">
+        <!-- Upon click, call the method navigateToRouteBySpecificUrlForUpdating() passing the current order ID as parameter -->
+         <button class="btn btn-primary" (click)="navigateToRouteBySpecificUrlForUpdating(order.orderId)"><fa-icon [icon]="faFile"></fa-icon></button> 
+        </td>
      </ng-container>
    
      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -1,3 +1,4 @@
+<!-- DIV is only activated if the cart isn't empty, the purchase hasn't ended and it's not yet time to the cardForm to open -->
 <div class="d-flex flex-row justify-content-center customFixing" *ngIf="productList.length > 0 && !purchaseEnded && !cardFormMustOpen">
  <table mat-table [dataSource]="productList" class="mat-elevation-z8">
 
@@ -30,12 +31,14 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
+<!-- Follows the same rule as the above, and provides the user with the buttons to proceed with his purchase or empty the cart -->
 <div class="d-flex flex-row justify-content-center customFixing" *ngIf="productList.length > 0 && !purchaseEnded && !cardFormMustOpen">
     <div class="d-flex flex-row justify-content-between customSizing">
         <button type="button" class="btn btn-danger" (click)="removeAllItems()">Esvaziar Carrinho</button>
         <button type="button" class="btn btn-success" (click)="finalizeCartPhase()">Confirmar Compra</button>
     </div>
 </div>
+<!-- This div houses the cardForm and will only open when the cardFormMustOpen value returns true and the purchase has not ended -->
 <div class="d-flex flex-row justify-content-center customFixing" *ngIf="cardFormMustOpen && !purchaseEnded">
     <div class="container customMinorFixing bg-light">
         <div class="modal-header">
@@ -78,7 +81,8 @@
 </div>
 
 
- 
+ <!-- This div contains the simple representation of the car empty, it will only be displayed in case the cart is empty and the purchase has not ended nor it is time
+for the cardForm to open -->
  <ng-container *ngIf="productList.length == 0 && !purchaseEnded && !cardFormMustOpen">
      <div class="container">
          <div class="card">
@@ -90,6 +94,8 @@
      </div>
  </ng-container>
  
+
+ <!-- After all verifications have been done and the purchase has ended, display this div for the user -->
  <ng-container *ngIf="purchaseEnded">
      <div class="container">
          <div class="card">

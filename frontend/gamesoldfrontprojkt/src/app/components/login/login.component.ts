@@ -4,9 +4,10 @@ import { LoginService } from 'src/app/service/login.service';
 import { FormGroup, FormBuilder, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { UserDTO } from '../model/UserDTO';
 import { Router } from '@angular/router';
-import jwtDecode from 'jwt-decode';
 import { TokenInfo } from 'src/app/service/tokeninfo';
-
+/**
+ * This component is responsible for the user login.
+ */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -24,6 +25,7 @@ export class LoginComponent implements OnInit {
   });
   submitted: boolean = false;
 
+  /* Upon construction, receives a loginService, a formBuilder, a router and tokenInfo via dependency injection */
   constructor(private loginService: LoginService, private formBuilder: FormBuilder, private route: Router, private tokenInfo: TokenInfo) {
     
    }

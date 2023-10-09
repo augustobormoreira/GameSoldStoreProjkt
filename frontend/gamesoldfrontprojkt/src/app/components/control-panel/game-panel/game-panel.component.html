@@ -4,22 +4,28 @@
             <span class="fs-5">Ações Jogos:</span>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
-            <button type="button" class="btn btn-outline-warning" routerLink="all-games">Todos </button>
+            <!--Upon route activation, redirects to the allgames component using the route all-games -->
+            <button type="button" class="btn btn-outline-warning" routerLink="all-games">Todos</button>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <!--Upon click calls the local method downloadGameReport()  -->
             <button type="button" class="btn btn-outline-secondary" (click)="downloadGameReport()">Relatório</button>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <!--Upon route activation, redirects to addgamecomponent using the route add-game -->
             <button type="button" class="btn btn-outline-success" routerLink="add-game">Adicionar</button>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <!--Upon route activation, redirects to the updategame component using the route update-games -->
             <button type="button" class="btn btn-outline-primary" routerLink="update-game">Atualizar</button>
         </div>
         <div class="col-sm-2 align-items-center d-flex flex-row justify-content-end">
+            <!--Upon route activation, redirects to the removegame component using the route remove-game -->
             <button type="button" class="btn btn-outline-danger" routerLink="remove-game">Remover</button>
         </div>
     </div>
     <div class="body-display">
+        <!-- This is the router outlet responsible for displaying the components activated via routerLink at the above section -->
         <router-outlet></router-outlet>
     </div>
 </div>

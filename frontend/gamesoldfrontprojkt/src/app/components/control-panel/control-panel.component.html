@@ -12,6 +12,7 @@
                 <div class="d-flex">
                   <button class="btn btn-outline-secondary" [matMenuTriggerFor]="configMenu">Config</button>
                         <mat-menu #configMenu="matMenu">
+                          <!-- Upon click calls for the local method logOutUserAndRedirectToLoginPage() -->
                             <button mat-menu-item (click)="logOutUserAndRedirectToLoginPage()">Sair</button>
                         </mat-menu>
                 </div>
@@ -23,13 +24,19 @@
         <div class="side-nav border-end border-dark">
             <mat-list>
                 <mat-action-list>
+                    <!-- Upon route activation redirects to user-panel component -->
                     <button mat-list-item routerLink="user-panel">Usuários</button>
+
+                    <!-- Upon route activation redirects to game-panel component -->
                     <button mat-list-item routerLink="game-panel">Jogos</button>
+
+                    <!-- Upon route activation redirects to order-panel component -->
                     <button mat-list-item routerLink="order-panel">Vendas</button>
                   </mat-action-list>
             </mat-list>
         </div>
         <div class="display-nav d-flex justify-content-center">
+          <!-- This is the router outlet responsible for displaying the components activated via routerLink at the above section -->
             <router-outlet></router-outlet>
         </div>
     </div>
