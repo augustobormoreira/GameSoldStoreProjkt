@@ -11,6 +11,7 @@
 	<groupId>gamesoldstoreprojkt</groupId>
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<package>war</package>
 	<name>demo</name>
 	<description>App designed to demonstrate some of my basic skills.</description>
 	<properties>
@@ -100,6 +101,11 @@
     				<skipTests>true</skipTests>  
     			</configuration>  
 			</plugin> 
+			<plugin>
+    			<groupId>com.heroku.sdk</groupId>
+    			<artifactId>heroku-maven-plugin</artifactId>
+    			<version>3.0.7</version>
+			</plugin>
 		</plugins>
 	</build>
 
