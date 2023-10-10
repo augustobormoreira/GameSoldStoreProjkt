@@ -11,7 +11,6 @@
 	<groupId>gamesoldstoreprojkt</groupId>
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<package>war</package>
 	<name>demo</name>
 	<description>App designed to demonstrate some of my basic skills.</description>
 	<properties>
