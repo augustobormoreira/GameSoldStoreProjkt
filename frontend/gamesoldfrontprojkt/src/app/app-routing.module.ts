@@ -19,6 +19,7 @@ import { OrderPanelComponent } from './components/control-panel/order-panel/orde
 import { AllorderscomponentComponent } from './components/control-panel/order-panel/allorderscomponent/allorderscomponent.component';
 import { UpdateOrderComponentComponent } from './components/orders/update-order/update-order-component/update-order-component.component';
 import { AuthGuard } from './service/authguard';
+import { EditProfileComponent } from './components/user-components/edit-profile/edit-profile.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'user-login', pathMatch: 'full'},
@@ -119,7 +120,8 @@ const routes: Routes = [
       }
     ],
     canActivate: [AuthGuard]
-  }
+  },
+  {path: 'edit-profile', component: EditProfileComponent}
 ];
 
 @NgModule({

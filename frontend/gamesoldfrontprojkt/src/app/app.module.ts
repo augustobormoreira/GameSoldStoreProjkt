@@ -50,6 +50,7 @@ import { RegisterUserCardComponent } from './components/user-components/register
 import { CardService } from './service/card.service';
 import { AuthGuard } from './service/authguard';
 import { TokenInfo } from './service/tokeninfo';
+import { EditProfileComponent } from './components/user-components/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { TokenInfo } from './service/tokeninfo';
     AllorderscomponentComponent,
     UpdateOrderComponentComponent,
     RegisterUserCardComponent,
+    EditProfileComponent,
   ],
   imports: [
     AppRoutingModule,

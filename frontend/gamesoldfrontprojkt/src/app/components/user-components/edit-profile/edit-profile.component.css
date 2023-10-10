@@ -1,0 +1,35 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+.body {
+    width: 90vh;
+    height: 85vh;
+    background-color: #ebe6e6de;
+    align-self: center;
+}
+
+.head{
+    width: 100%;
+    height: 15%;
+}
+
+form{
+    width: 80%;
+    height: 100%;
+}
+
+.body-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    height: 70%;
+}
+
+.footer {
+    width: 100%;
+    height: 15%;
+}
