@@ -1,14 +1,10 @@
 package gamesoldstoreprojkt.Controller;
 
 import java.io.ByteArrayInputStream;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,40 +19,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import gamesoldstoreprojkt.Exceptions.UserAlreadyExistsInDatabaseException;
-import gamesoldstoreprojkt.Exceptions.UserDoesNotExistInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.UserExceptions.UserAlreadyExistsInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.UserExceptions.UserDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.Employee;
 import gamesoldstoreprojkt.Model.User;
 import gamesoldstoreprojkt.Model.UserRoles;
 import gamesoldstoreprojkt.service.DatabasePDFService;
 import gamesoldstoreprojkt.service.UserService;
-import lombok.AllArgsConstructor;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
+    /* Get all users registered in database */
     @GetMapping("/allUsers")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> allUsers = this.userService.findAllUsers();
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
+    /* Get all clients registered in database */
     @GetMapping("/clients")
     public ResponseEntity<List<Client>> getAllClients(){
         List<Client> allClients = this.userService.findAllClients();
         return new ResponseEntity<>(allClients, HttpStatus.OK);
     }
 
+    /* Get all employees registered in database */
     @GetMapping("/employees")
     public ResponseEntity<List<Employee>> getAllEmployees(){
         List<Employee> allEmployees = this.userService.findAllEmployees();
         return new ResponseEntity<>(allEmployees, HttpStatus.OK);
     }
 
+    /* Get all users in database as PDF file */
     @GetMapping("/users_report")
     public ResponseEntity<InputStreamResource> turnListOfUsersIntoPdfOutput(){
         List<Client> allClients = this.userService.findAllClients();
@@ -70,6 +69,7 @@ public class UserController {
     }
 
 
+    /* Add client to database, throws exception if client already exists */
     @PostMapping("/addClient")
     public ResponseEntity<Client> addNewClient(@RequestBody Client client) throws UserAlreadyExistsInDatabaseException{
         String password = new BCryptPasswordEncoder().encode(client.getPassword());
@@ -80,6 +80,7 @@ public class UserController {
         return new ResponseEntity<>(newClient, HttpStatus.OK);
     }
 
+    /* Add employee to database, throws exception if employee already exists */
     @PostMapping("/addEmployee")
     public ResponseEntity<Employee> addNewEmployee(@RequestBody Employee employee) throws UserAlreadyExistsInDatabaseException{
 
@@ -90,6 +91,7 @@ public class UserController {
         return new ResponseEntity<>(newEmployee, HttpStatus.OK);
     }
 
+    /* Get user by ID, throws exception if user does not exist */
     @GetMapping("/{id}")
     public ResponseEntity<User> findUserById(@PathVariable("id") String identificationNumber) throws UserDoesNotExistInDatabaseException{
         User newUser = this.userService.findUserById(identificationNumber);
@@ -97,12 +99,14 @@ public class UserController {
         
     }
 
+    /* Deletes user by id, throws exception if user does not exist */
     @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<User> deleteUserById(@PathVariable("id") String id ) throws UserDoesNotExistInDatabaseException{
         User newUser = this.userService.removeUserById(id);
         return new ResponseEntity<>(newUser, HttpStatus.OK);        
     }
 
+    /* Updates client by ID and value retrieved from body, throws exception if client does not exist */
     @PutMapping("/updateClient/{id}")
     public ResponseEntity<Client> updateClientByCpf(@PathVariable("id") String id, @RequestBody Client updatedClient) throws UserDoesNotExistInDatabaseException, UserAlreadyExistsInDatabaseException{
         String password = new BCryptPasswordEncoder().encode(updatedClient.getPassword());
@@ -114,6 +118,7 @@ public class UserController {
        
     }
 
+    /* Updates employee by ID and value retrieved from body, throws exception if employee does not exist */
     @PutMapping("/updateEmployee/{id}")
     public ResponseEntity<Employee> updateEmployeeByCpf(@PathVariable("id") String id, @RequestBody Employee updatedEmployee) throws UserDoesNotExistInDatabaseException, UserAlreadyExistsInDatabaseException{
         String password = new BCryptPasswordEncoder().encode(updatedEmployee.getPassword());

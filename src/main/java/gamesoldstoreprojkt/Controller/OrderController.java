@@ -2,9 +2,11 @@ package gamesoldstoreprojkt.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import gamesoldstoreprojkt.Exceptions.OrderDoesNotExistInDatabaseException;
-import gamesoldstoreprojkt.Exceptions.UserAlreadyExistsInDatabaseException;
-import gamesoldstoreprojkt.Exceptions.UserDoesNotExistInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.GameExceptions.GameDoesNotExistInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.OrderExceptions.OrderAlreadyExistsInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.OrderExceptions.OrderDoesNotExistInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.UserExceptions.UserAlreadyExistsInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.UserExceptions.UserDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.Model.Order;
@@ -20,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -47,20 +47,20 @@ public class OrderController {
     @Autowired
     private GameProductService gameProductService;
 
-    /* Add new order to database */
+    /* Add new order to database, throws exception if user does not exist in database, or order already exists in database */
     @PostMapping("/createOrder")
-    public ResponseEntity<Order> addNewOrder(@RequestBody OrderDTO orderDTO) throws UserAlreadyExistsInDatabaseException {
-        Optional<User> userBuyer = this.userService.findByUserusername(orderDTO.getUserName()); /* Get User by userName on orderDTO */
+    public ResponseEntity<Order> addNewOrder(@RequestBody OrderDTO orderDTO) throws UserAlreadyExistsInDatabaseException, UserDoesNotExistInDatabaseException, OrderAlreadyExistsInDatabaseException, NumberFormatException, GameDoesNotExistInDatabaseException {
+        User userBuyer = this.userService.findByUserusername(orderDTO.getUserName()); /* Get User by userName on orderDTO */
         GameProduct [] idGamesToBuy = this.gameProductService.getGamesById(orderDTO.getIdBuyedGames()); /* Get array of games by gamesID array on orderDTO */
         
-        if(orderDTO.getPaymentMethod().equalsIgnoreCase("credit")){ /* If user payed with credit, we consider order as not payed and add the order price to his debt */
-            Client updatedClient = (Client) userBuyer.get();
-            updatedClient.setClientDebt(Double.parseDouble(orderDTO.getOrderPrice()));
-            this.userService.addUser(updatedClient);
-        }
+       /* If user payed with credit, we consider order as not payed and add the order price to his debt */
+        Client updatedClient = (Client) userBuyer;
+        this.orderService.setDebtToUserOnOrderSavedBasedOnPaymentMethod(orderDTO, updatedClient);
+        this.userService.addUser(updatedClient);
+        
 
         /* Create new order */
-        Order orderToBeSaved = new Order(userBuyer.get(), idGamesToBuy, orderDTO.getOrderIsPayed() , Double.parseDouble(orderDTO.getOrderPrice()), orderDTO.getPaymentMethod());
+        Order orderToBeSaved = new Order(userBuyer, idGamesToBuy, orderDTO.getOrderIsPayed() , Double.parseDouble(orderDTO.getOrderPrice()), orderDTO.getPaymentMethod());
 
         Order newOrder = this.orderService.createOrder(orderToBeSaved);/* Add order to database */
         return new ResponseEntity<>(newOrder, HttpStatus.OK);
@@ -73,30 +73,27 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    /* Get order by id */
+    /* Get order by id, throws exception if order does not exist */
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable("id") Long id) throws OrderDoesNotExistInDatabaseException{
-        try{
-        Order newOrder = this.orderService.findOrderById(id).get();
-        return new ResponseEntity<>(newOrder, HttpStatus.OK);
-        }catch(NoSuchElementException exception){
-            throw new OrderDoesNotExistInDatabaseException("Order with ID: " + Long.toString(id) + " does not exist.");
-        }
+        Order newOrder = this.orderService.findOrderById(id);
+        return new ResponseEntity<>(newOrder, HttpStatus.OK);        
     }
 
-    /* Update order in the database, by project logic we only update the status of the order, e.g if order is payed or not */
+    /* Update order in the database, by project logic we only update the status of the order, e.g if order is payed or not.
+     * If Order does not exist in database, throws exception.
+     * If user does not exist in database, throws exception.
+    */
     @PutMapping("/updateOrder/{id}")
-    public ResponseEntity<Order> updateOrderById(@PathVariable("id") Long orderId, @RequestBody OrderDTO orderDTO) throws OrderDoesNotExistInDatabaseException, UserAlreadyExistsInDatabaseException, UserDoesNotExistInDatabaseException {
-        Order orderToBeUpdated = this.orderService.findOrderById(orderId).get();
+    public ResponseEntity<Order> updateOrderById(@PathVariable("id") Long orderId, @RequestBody OrderDTO orderDTO) throws OrderDoesNotExistInDatabaseException, UserAlreadyExistsInDatabaseException, UserDoesNotExistInDatabaseException, OrderAlreadyExistsInDatabaseException {
+        Order orderToBeUpdated = this.orderService.findOrderById(orderId);
 
-        if(orderToBeUpdated == null) throw new OrderDoesNotExistInDatabaseException("Order with ID: " + Long.toString(orderId) + " does not exist!"); /* Does order exist? If not, throw exception */
-
-        orderToBeUpdated.setOrderIsPayed(orderDTO.getOrderIsPayed());
-        if(orderToBeUpdated.getPaymentMethod().equalsIgnoreCase("credit")){ /* Is order to be updated a credit payed order? If so, remove debt from client */         
+        /* If the status of the order is different, we perform some actions. If not no further action is neccessary */
+        if(orderToBeUpdated.getOrderIsPayed()!=orderDTO.getOrderIsPayed()){
             Client clientBuyer = (Client) this.userService.findUserById(Long.toString(orderToBeUpdated.getClientBuyer().getIdentificationNumber()));
-            clientBuyer.setClientDebt(orderToBeUpdated.getOrderPrice() * -1);
+            this.orderService.verifyOrderStatusAndSetClientDebt(orderToBeUpdated, orderDTO, clientBuyer);
             this.userService.addUser(clientBuyer);
-        }
+        }    
 
         this.orderService.createOrder(orderToBeUpdated);
 

@@ -2,8 +2,6 @@ package gamesoldstoreprojkt.Controller;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -20,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import gamesoldstoreprojkt.Exceptions.GameDoesNotExistInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.GameExceptions.GameAlreadyExistsInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.GameExceptions.GameDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.service.DatabasePDFService;
 import gamesoldstoreprojkt.service.GameProductService;
@@ -32,9 +31,9 @@ public class GameProductController {
     @Autowired
     private GameProductService productService;
 
-    /* Add new product in database */
+    /* Add new product in database. If product already exists in database, throw exception*/
     @PostMapping("/addProduct")
-    public ResponseEntity<GameProduct> createNewProduct(@RequestBody GameProduct product){
+    public ResponseEntity<GameProduct> createNewProduct(@RequestBody GameProduct product) throws GameAlreadyExistsInDatabaseException{
         GameProduct newProduct = this.productService.addProduct(product);
         return new ResponseEntity<>(newProduct, HttpStatus.OK);
     }
@@ -47,16 +46,12 @@ public class GameProductController {
         return new ResponseEntity<>(allProducts, HttpStatus.OK);
     }
 
-    /* Get Game by Id */
+    /* Get Game by Id. If product does not exist in database, throw exception */
     @GetMapping("/{id}")
     public ResponseEntity<GameProduct> getProductById(@PathVariable("id") Long id) throws GameDoesNotExistInDatabaseException{
         /* Does product exist? If not, throw exception */
-        try{
-            GameProduct newProduct = this.productService.getProductById(id).get();
+            GameProduct newProduct = this.productService.getProductById(id);
             return new ResponseEntity<>(newProduct, HttpStatus.OK);
-        }catch(NoSuchElementException exception){
-            throw new GameDoesNotExistInDatabaseException("Game with ID: " + Long.toString(id) + " does not exist");
-        }
     }
 
     /* Return PDF of all games */
@@ -71,22 +66,19 @@ public class GameProductController {
         .body(new InputStreamResource(bis));
     }
     
-    /* Update a product in the database */
+    /* Update a product in the database. If product does not exist in database, throw exception */
     @PutMapping("/updateProduct/{id}")
     public ResponseEntity<GameProduct> updateProductById(@PathVariable("id") Long id, @RequestBody GameProduct gameProduct) throws GameDoesNotExistInDatabaseException{
-        try{
+        
 
-        GameProduct newProduct = this.productService.getProductById(id).get();
+        GameProduct newProduct = this.productService.getProductById(id);
         newProduct.setToUpdatedObject(gameProduct); /* Update newProduct with all the gameProduct values */
         this.productService.updateProduct(newProduct); /* Save on database */
 
         return new ResponseEntity<>(newProduct, HttpStatus.OK);
-        }catch(NoSuchElementException exception) {
-            throw new GameDoesNotExistInDatabaseException("Game with ID: " + Long.toString(id) + " does not exist");
-        }
     }
 
-    /* Delete product by id */
+    /* Delete product by id. If product does not exist in database, throw exception */
     @DeleteMapping("/removeProduct/{id}")
     public ResponseEntity<GameProduct> deleteProductById(@PathVariable("id") Long id) throws GameDoesNotExistInDatabaseException{
         GameProduct newGameProduct = this.productService.removeProductById(id);

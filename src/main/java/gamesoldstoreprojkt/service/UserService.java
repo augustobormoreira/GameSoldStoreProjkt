@@ -9,8 +9,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import gamesoldstoreprojkt.Exceptions.UserAlreadyExistsInDatabaseException;
-import gamesoldstoreprojkt.Exceptions.UserDoesNotExistInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.UserExceptions.UserAlreadyExistsInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.UserExceptions.UserDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.Employee;
 import gamesoldstoreprojkt.Model.User;
@@ -27,7 +27,7 @@ public class UserService {
     private UserRepository userRepository;  
     
 
-    /* Receive a new User or an updated User to be saved in the database */
+    /* Receive a new User or an updated User to be saved in the database. If the user already exists in the database throw exception */
     public User addUser(User user) throws UserAlreadyExistsInDatabaseException{
         try{
             return this.userRepository.save(user);
@@ -36,18 +36,9 @@ public class UserService {
         }
     }
 
-    public User saveUpdatedUser(User user){
-        return this.userRepository.save(user);
-    }
-
     /* Does employee exist? Find employee by received ID and returns Optional */
     public Optional<Employee> findEmployeeById(Long id){
         return this.userRepository.findEmployeeById(id);
-    }
-
-    /* Deprecated method, will be deleted */
-    public Optional<List<Client>> findClientById(Long id){
-        return this.userRepository.findClientById(id);
     }
 
     /* Returns a list of all users on the database which are of type Client */
@@ -65,7 +56,7 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    /* Does user exist? Find user by received ID and returns Optional */
+    /* Does user exist? Find user by received ID , if user does not exist throw exception */
     public User findUserById(String id) throws UserDoesNotExistInDatabaseException{
         try{
             return this.userRepository.findById(id).get();
@@ -79,9 +70,13 @@ public class UserService {
         return this.userRepository.findByusername(username);
     }
 
-    /* Does user exist? Look for user on database by username and returns an optional of type User */
-    public Optional<User> findByUserusername(String username){
-        return this.userRepository.getByusername(username);
+    /* Does user exist? Look for user on database by username , if user does not exist throw exception */
+    public User findByUserusername(String username) throws UserDoesNotExistInDatabaseException{
+        try{
+            return this.userRepository.getByusername(username).get();
+        }catch(NoSuchElementException exception){
+            throw new UserDoesNotExistInDatabaseException("User with username: " + username + " does not exist in database.");
+        }
     }
     
     /* Method responsible for removing a user from the database from the received ID */
