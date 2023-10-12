@@ -3,7 +3,6 @@ package gamesoldstoreprojkt.Security;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,10 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/* Security configuration class. Here we store every configuration that we need, disable basic Spring Security default configurations and set up our own. */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer{
@@ -32,12 +31,15 @@ public class SecurityConfig implements WebMvcConfigurer{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        /* Here we disable csrf, set up our authentication as stateless, define requests that only admins can access, add our corsfilters and only after that we build
+         * our object.
+         */
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                   .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers(HttpMethod.POST, "auth/login").permitAll()
-                    .requestMatchers(HttpMethod.POST, "users/addClient").permitAll()
+                    .requestMatchers(HttpMethod.POST, "auth/login").permitAll() /* Login request can be made by any */
+                    .requestMatchers(HttpMethod.POST, "users/addClient").permitAll() /* New user of type client request can be made by any */
                     .requestMatchers(HttpMethod.POST, "/orders").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "/orders").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/orders").hasRole("ADMIN")
@@ -50,7 +52,7 @@ public class SecurityConfig implements WebMvcConfigurer{
                     .anyRequest().authenticated()
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) /* Add filter to make necessary verifications based on token information */
                 .build();
     }
 
@@ -75,11 +77,15 @@ public class SecurityConfig implements WebMvcConfigurer{
         return source;
     }
 
+    /* This method is responsible for returning of an instance of Spring Security's Authentication Manager for usage on our application.
+     * The Bean annotation is required so that Spring can perform dependency injection.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    /* This method is responsible for returning a BCryptPasswordEncoder for password hashing before database insertion. */
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

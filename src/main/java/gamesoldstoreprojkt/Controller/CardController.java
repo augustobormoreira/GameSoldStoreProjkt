@@ -1,6 +1,5 @@
 package gamesoldstoreprojkt.Controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,54 +16,49 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gamesoldstoreprojkt.Model.Card;
 import gamesoldstoreprojkt.Model.CardDTO;
-import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.User;
 import gamesoldstoreprojkt.service.CardService;
 import gamesoldstoreprojkt.service.UserService;
-
+/* Rest controller responsible for operations for all crud operations on Cards. */
 @RestController
 @RequestMapping("/cards")
 public class CardController {
+    /* cardService and userService autowired as it will be needed in methods */
     @Autowired  
     public CardService cardService;
     @Autowired
     public UserService userService;
 
 
+    /* Create new card and add into the database */
     @PostMapping("/new-card")
     public ResponseEntity<Card> addNewCard(@RequestBody CardDTO cardDTO){
-        User clientOwner = this.userService.findByClientusername(cardDTO.getCardOwnerName()).get();
-        String cardPassword = new BCryptPasswordEncoder().encode(cardDTO.getCardPassword());
-        Card newCard = new Card(cardDTO.getCardNumber(), clientOwner, cardDTO.getExpiryDate(), cardPassword, cardDTO.getCardType());
-        newCard = this.cardService.addNewCard(newCard);
+        User clientOwner = this.userService.findByUserusername(cardDTO.getCardOwnerName()).get(); /* Get client by username */
+        if(clientOwner == null) return ResponseEntity.badRequest().build(); /* Does client exist? If not return bad request */
+        String cardPassword = new BCryptPasswordEncoder().encode(cardDTO.getCardPassword()); /* Encrypt card password using BCrypt */
+        Card newCard = new Card(cardDTO.getCardNumber(), clientOwner, cardDTO.getExpiryDate(), cardPassword, cardDTO.getCardType()); /* Create new card */
+        newCard = this.cardService.addNewCard(newCard); /* Add card to database */
 
-        this.userService.addUser(clientOwner);
-        System.out.println(newCard.toString());
 
         return new ResponseEntity<>(newCard, HttpStatus.OK);
     }
 
-    @GetMapping("/user-cards")
-    public ResponseEntity<Card []> getCardsByOwnerName(String ownerName){
-        Card [] listOfCards =  null/*this.cardService.getCardsByOwnerName(ownerName)*/;
-
-        return new ResponseEntity<Card []>(listOfCards, HttpStatus.OK);
-    }
-
+    /* Delete a card in the database by cardNumber */
     @DeleteMapping("/delete-card")
     public ResponseEntity<Boolean> deleteCardByCardNumber(String cardNumber){
-        boolean cardHasBeenDeleted = false;
-        Card cardFound = this.cardService.getCardByCardNumber(cardNumber);
-        if(cardFound!=null){
-            cardHasBeenDeleted = this.cardService.deleteCard(cardFound);
-        }
+
+        Card cardFound = this.cardService.getCardByCardNumber(cardNumber); /* Get card by cardNumber */
+        if(cardFound == null) return ResponseEntity.badRequest().build(); /* Does card exist? If not, return bad request */
+        boolean cardHasBeenDeleted = this.cardService.deleteCard(cardFound); 
+    
 
         return new ResponseEntity<>(cardHasBeenDeleted, HttpStatus.OK);
     }
 
+     /*  Get Array of cards belonging to specific user */
     @GetMapping("/{username}/all-cards")
     public ResponseEntity<List<Card>> getCardsByUsername(@PathVariable("username") String username){
-        List<Card> cards = this.cardService.getCardsByOwnerName(username);
+        List<Card> cards = this.cardService.getCardsByOwnerName(username); /* Get a list of all cards belonging to the user */
         return new ResponseEntity<List<Card>>(cards, HttpStatus.OK);
     }
 

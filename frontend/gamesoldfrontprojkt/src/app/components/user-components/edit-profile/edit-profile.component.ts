@@ -39,6 +39,7 @@ export class EditProfileComponent implements OnInit {
     if(this.verifyPassword()){
       const user_id = this.tokenInfo.decodeJWT().userIdAndName[0];
       const userToBeUpdated : UserClient =  this.createNewUserFromUserForm();
+      console.log(userToBeUpdated);
       this.userService.updateExistingClient( user_id, userToBeUpdated);
     }else{
       alert("Passwords must match!!")
@@ -54,7 +55,6 @@ export class EditProfileComponent implements OnInit {
       this.userUpdateForm.get('uName')?.value,
       this.userUpdateForm.get('userPassword')?.value,
       "Client",
-      "debit",
       false,
       0
     );

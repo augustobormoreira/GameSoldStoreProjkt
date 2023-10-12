@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
   /* Decode json web token received from the backend to see if the logged in user is an ADMIN */
   userIsAdmin(): boolean {
     const userToken = this.tokenInfo.decodeJWT();
-    if(userToken != null && userToken.userIdAndName[1]=="ADMIN"){
+    if(userToken != null && userToken.userIdAndRole[1]=="ADMIN"){
       return true;
     }
 

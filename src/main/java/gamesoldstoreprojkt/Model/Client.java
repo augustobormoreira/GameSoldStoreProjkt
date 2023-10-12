@@ -1,11 +1,7 @@
 package gamesoldstoreprojkt.Model;
 
-import java.util.ArrayList;
-
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +16,6 @@ import lombok.ToString;
 @Entity
 @DiscriminatorValue("Client")
 public class Client extends User {
-    private String preferredPaymentMethod;
     private boolean clientIsBlacklisted;
     private Double clientDebt = 0.0;
 
@@ -32,7 +27,6 @@ public class Client extends User {
         this.setUsername(client.getUsername());
         this.setPassword(client.getPassword());
         this.setRole(UserRoles.USER);
-        this.setPreferredPaymentMethod(client.getPreferredPaymentMethod());
         this.setClientIsBlacklisted(client.isClientIsBlacklisted());
         this.setEqualsClientDebt(client.getClientDebt());      
     }

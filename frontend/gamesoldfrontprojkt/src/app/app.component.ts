@@ -12,7 +12,7 @@ export class AppComponent {
 
   adminIsLoggedIn(){
     const userToken = this.decodeJWT();
-    if(userToken != null && userToken.userIdAndName[1]=="ADMIN"){
+    if(userToken != null && userToken.userIdAndRole[1]=="ADMIN"){
       return true;
     }
 

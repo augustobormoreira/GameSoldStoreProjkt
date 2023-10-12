@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from 'src/app/service/user.service';
 import { User } from '../../model/User';
 import { UserClient } from '../../model/UserClient';
@@ -26,7 +25,6 @@ export class UpdateUserComponent implements OnInit {
     userUName: new FormControl(),
     userType: new FormControl(),
     userPassword: new FormControl(),
-    preferredPaymentMethod: new FormControl(),
     clientIsBlacklisted: new FormControl(),
     clientDebt: new FormControl(),
     jobRole: new FormControl(),
@@ -79,6 +77,7 @@ export class UpdateUserComponent implements OnInit {
   updateConfirmedUser(){  
       if(this.isClient()){
         const updatedClient = this.createClient();
+        console.log(updatedClient);
         this.userService.updateExistingClient(this.userForm.get('userId')?.value, updatedClient);
       }else if(this.isEmployee()){
         const updatedEmployee = this.createEmployee();
@@ -111,7 +110,6 @@ export class UpdateUserComponent implements OnInit {
   /* This method fills the formcontrol values of CLIENT */
   setUserFormWithClientProperties(user: UserClient){
     this.userForm.get('userType')?.value === "client";
-    this.userForm.get('preferredPaymentMethod')?.setValue(user.preferredPaymentMethod);
     if(user.clientIsBlacklisted){
       this.userForm.get('clientIsBlacklisted')?.setValue("true");
     }else{
@@ -147,7 +145,6 @@ export class UpdateUserComponent implements OnInit {
       this.userForm.get('userUName')?.value,
       this.userForm.get('userPassword')?.value,
       "Client",
-      this.userForm.get('preferredPaymentMethod')?.value,
       this.userForm.get('clientIsBlacklisted')?.value,
       this.userForm.get('clientDebt')?.value
     );

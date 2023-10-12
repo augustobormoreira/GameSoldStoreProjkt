@@ -13,7 +13,8 @@ import gamesoldstoreprojkt.Model.User;
 
 public interface UserRepository extends JpaRepository<User, String>  {
 
-    UserDetails findByusername(String login);
+    /* Find the user by the username and returns a User of type UserDetails*/
+    UserDetails findByusername(String username);
 
     Optional<User> getByusername(String username);
 

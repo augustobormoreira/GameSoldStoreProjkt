@@ -25,9 +25,9 @@ import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.Employee;
 import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.Model.Order;
-
+/* Class responsible for generating reports based on database data */
 public class DatabasePDFService<T> {
- 
+    /* Returns a pdf of all users */
     public static ByteArrayInputStream usersPDFReport(List<Employee> employees, List<Client> clients) {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -121,7 +121,7 @@ public class DatabasePDFService<T> {
  
             PdfPTable newTable = new PdfPTable(7);
             // Add PDF Table Header ->
-            Stream.of("ID", "Nome", "N°", "Rua", "N° da Rua", "Método Pagamento", "Dívida").forEach(headerTitle -> {
+            Stream.of("ID", "Nome", "N°", "Rua", "N° da Rua", "Dívida").forEach(headerTitle -> {
                 PdfPCell header = new PdfPCell();
                 Font headFont = FontFactory.getFont(FontFactory.TIMES_BOLD);
                 header.setBackgroundColor(Color.CYAN);
@@ -162,12 +162,6 @@ public class DatabasePDFService<T> {
                 streetNumberCell.setPaddingRight(4);
                 newTable.addCell(streetNumberCell);
 
-                PdfPCell paymentMethodCell = new PdfPCell(new Phrase(String.valueOf(client.getPreferredPaymentMethod())));
-                paymentMethodCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                paymentMethodCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                paymentMethodCell.setPaddingRight(4);
-                newTable.addCell(paymentMethodCell);
-
                 PdfPCell debtCell = new PdfPCell(new Phrase(String.valueOf(client.getClientDebt())));
                 debtCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 debtCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -183,6 +177,8 @@ public class DatabasePDFService<T> {
  
         return new ByteArrayInputStream(out.toByteArray());
     }
+    
+    /* Returns a pdf of all games */
     public static ByteArrayInputStream gamesPDFReport(List<GameProduct> games) {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -251,6 +247,7 @@ public class DatabasePDFService<T> {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
+    /* Returns a pdf of all orders(sales) */
     public static ByteArrayInputStream salesPDFReport(List<Order> sales) {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -325,12 +322,14 @@ public class DatabasePDFService<T> {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
+    /* If array of tags is null, returns a simple string of No tags found, if not returns a string of all tags */
     public static String  returnStringIfArrayNotNull(String [] tags){ 
         if(tags == null) return "No tags found";
 
         return Arrays.toString(tags);
     }
 
+    /* If array of products is null returns a simple string of No products foind, if not returns a string of all products names */
     public static String returnStringIfArrayNotNull(GameProduct [] products){
         if(products == null) return "No products found";
 
@@ -342,6 +341,7 @@ public class DatabasePDFService<T> {
         return Arrays.toString(arrayGameNames);
     }
 
+    /* If orderStatus is true returns string Payed, if not returns String awaiting payment */
     public static String returnPayedIfTrueElseReturnNotPayed(boolean orderStatus){
         if(orderStatus) return "Payed";
 

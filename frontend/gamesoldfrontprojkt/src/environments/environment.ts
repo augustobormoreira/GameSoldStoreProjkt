@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://https://gamesoldprojkt-api-5e855d6b6c8e.herokuapp.com/'
+  API_URL: 'http://localhost:8080'
 };
 
 /*

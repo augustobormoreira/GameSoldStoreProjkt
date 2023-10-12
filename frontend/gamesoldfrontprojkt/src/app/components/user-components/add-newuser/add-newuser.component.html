@@ -43,14 +43,6 @@
           </button>
         </mat-form-field>        
         <!--Special values to CLIENT ROLE-->
-
-        <mat-form-field *ngIf="isClient()">
-          <mat-label>Metodo de Pagamento</mat-label>
-          <mat-select formControlName="preferredPaymentMethod">
-            <mat-option value="credito" >Credito</mat-option>
-            <mat-option value="debito" >Debito</mat-option>
-          </mat-select>
-        </mat-form-field>
         <mat-form-field *ngIf="isClient()">
           <mat-label>Permissao para executar compras:</mat-label>
           <mat-select formControlName="clientIsBlacklisted">

@@ -34,16 +34,8 @@
             <button mat-icon-button matSuffix (click)="passwordHide = !passwordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordHide">
               <mat-icon>{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
-          </mat-form-field>        
-          <!--Special values to CLIENT ROLE-->
-  
-          <mat-form-field>
-            <mat-label>Metodo de Pagamento</mat-label>
-            <mat-select formControlName="preferredPaymentMethod">
-              <mat-option value="credito" >Credito</mat-option>
-              <mat-option value="debito" >Debito</mat-option>
-            </mat-select>
           </mat-form-field>  
+
           <div class="modal-footer">
             <button type="submit" class="btn btn-outline-dark" >Registrar</button>
           </div>    

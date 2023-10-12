@@ -3,34 +3,34 @@
         <h2 class=" fs-2 fw-bold">Profile: Augusto</h2>
     </div>
     <div class="body-content">
-        <form class="d-flex flex-column align-self-center">
+        <form [formGroup]="userUpdateForm" class="d-flex flex-column align-self-center">
         <mat-form-field>
             <mat-label>Name:</mat-label>
-            <input matInput>
+            <input  ngModel class="form-control" formControlName="user_name" matInput>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Street Name:</mat-label>
-            <input matInput>
+            <input  ngModel class="form-control" formControlName="userStreetName" matInput>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Street Number:</mat-label>
-            <input matInput>
+            <input  ngModel class="form-control" formControlName="userStreetNumber" matInput>
         </mat-form-field>
         <mat-form-field>
             <mat-label>House Number:</mat-label>
-            <input matInput>
+            <input  ngModel class="form-control" formControlName="userHomeNumber" matInput>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Username:</mat-label>
-            <input matInput>
+            <input  ngModel class="form-control" formControlName="uName" matInput>
         </mat-form-field>
         <mat-form-field>
             <mat-label>New Password:</mat-label>
-            <input matInput>
+            <input  ngModel class="form-control" formControlName="userPassword" matInput>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Repeat New Password:</mat-label>
-            <input matInput>
+            <input  ngModel class="form-control" formControlName="verifyPassword" matInput>
         </mat-form-field>
     </form>
         

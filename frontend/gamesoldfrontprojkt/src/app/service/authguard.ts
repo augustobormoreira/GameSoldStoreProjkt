@@ -11,7 +11,7 @@ export class AuthGuard implements CanActivate {
 
     /* Method returns true if the userRole stored in the token is an admin, else returns false */
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-        if(this.tokenInfo.decodeJWT().userIdAndName[1] === "ADMIN") return true;
+        if(this.tokenInfo.decodeJWT().userIdAndRole[1] === "ADMIN") return true;
 
         return false;
     }

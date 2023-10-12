@@ -2,6 +2,9 @@ package gamesoldstoreprojkt.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import gamesoldstoreprojkt.Exceptions.OrderDoesNotExistInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.UserAlreadyExistsInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.UserDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.Model.Order;
@@ -14,12 +17,13 @@ import gamesoldstoreprojkt.service.UserService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import lombok.AllArgsConstructor;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,48 +36,64 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+/* Controller responsible for all crud methods for Orders */
 @RestController
-@AllArgsConstructor
 @RequestMapping("/orders")
 public class OrderController {
-    private final OrderService orderService;
-    private final UserService userService;
-    private final GameProductService gameProductService;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private GameProductService gameProductService;
 
+    /* Add new order to database */
     @PostMapping("/createOrder")
-    public ResponseEntity<Order> addNewOrder(@RequestBody OrderDTO orderDTO) {
-        Optional<User> userBuyer = this.userService.findByClientusername(orderDTO.getUserName());
-        GameProduct [] idGamesToBuy = this.gameProductService.getGamesById(orderDTO.getIdBuyedGames());
+    public ResponseEntity<Order> addNewOrder(@RequestBody OrderDTO orderDTO) throws UserAlreadyExistsInDatabaseException {
+        Optional<User> userBuyer = this.userService.findByUserusername(orderDTO.getUserName()); /* Get User by userName on orderDTO */
+        GameProduct [] idGamesToBuy = this.gameProductService.getGamesById(orderDTO.getIdBuyedGames()); /* Get array of games by gamesID array on orderDTO */
         
-        if(orderDTO.getPaymentMethod().equalsIgnoreCase("credit")){
+        if(orderDTO.getPaymentMethod().equalsIgnoreCase("credit")){ /* If user payed with credit, we consider order as not payed and add the order price to his debt */
             Client updatedClient = (Client) userBuyer.get();
             updatedClient.setClientDebt(Double.parseDouble(orderDTO.getOrderPrice()));
             this.userService.addUser(updatedClient);
         }
+
+        /* Create new order */
         Order orderToBeSaved = new Order(userBuyer.get(), idGamesToBuy, orderDTO.getOrderIsPayed() , Double.parseDouble(orderDTO.getOrderPrice()), orderDTO.getPaymentMethod());
 
-        Order newOrder = this.orderService.createOrder(orderToBeSaved);
+        Order newOrder = this.orderService.createOrder(orderToBeSaved);/* Add order to database */
         return new ResponseEntity<>(newOrder, HttpStatus.OK);
     }
 
+    /* Get list of all orders in the database */
     @GetMapping("/all")
     public ResponseEntity<List<Order>> getAllOrders(){
         List<Order> orders = this.orderService.getAllOrders();
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    /* Get order by id */
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Order>> getOrderById(@PathVariable("id") Long id){
-        Optional<Order> newOrder = this.orderService.findOrderById(id);
+    public ResponseEntity<Order> getOrderById(@PathVariable("id") Long id) throws OrderDoesNotExistInDatabaseException{
+        try{
+        Order newOrder = this.orderService.findOrderById(id).get();
         return new ResponseEntity<>(newOrder, HttpStatus.OK);
+        }catch(NoSuchElementException exception){
+            throw new OrderDoesNotExistInDatabaseException("Order with ID: " + Long.toString(id) + " does not exist.");
+        }
     }
 
+    /* Update order in the database, by project logic we only update the status of the order, e.g if order is payed or not */
     @PutMapping("/updateOrder/{id}")
-    public ResponseEntity<Order> updateOrderById(@PathVariable("id") Long orderId, @RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<Order> updateOrderById(@PathVariable("id") Long orderId, @RequestBody OrderDTO orderDTO) throws OrderDoesNotExistInDatabaseException, UserAlreadyExistsInDatabaseException, UserDoesNotExistInDatabaseException {
         Order orderToBeUpdated = this.orderService.findOrderById(orderId).get();
+
+        if(orderToBeUpdated == null) throw new OrderDoesNotExistInDatabaseException("Order with ID: " + Long.toString(orderId) + " does not exist!"); /* Does order exist? If not, throw exception */
+
         orderToBeUpdated.setOrderIsPayed(orderDTO.getOrderIsPayed());
-        if(orderToBeUpdated.getPaymentMethod().equalsIgnoreCase("credit")){
-            Client clientBuyer = (Client) this.userService.findUserById(Long.toString(orderToBeUpdated.getClientBuyer().getIdentificationNumber())).get();
+        if(orderToBeUpdated.getPaymentMethod().equalsIgnoreCase("credit")){ /* Is order to be updated a credit payed order? If so, remove debt from client */         
+            Client clientBuyer = (Client) this.userService.findUserById(Long.toString(orderToBeUpdated.getClientBuyer().getIdentificationNumber()));
             clientBuyer.setClientDebt(orderToBeUpdated.getOrderPrice() * -1);
             this.userService.addUser(clientBuyer);
         }
@@ -83,6 +103,7 @@ public class OrderController {
         return new ResponseEntity<Order>(orderToBeUpdated, HttpStatus.OK);
     }
 
+    /* Get pdf of all orders in the database */
     @GetMapping("/orders_report")
     public ResponseEntity<InputStreamResource> turnListOfOrdersIntoPdfOutput(){
         List<Order> allOrders = this.orderService.getAllOrders();

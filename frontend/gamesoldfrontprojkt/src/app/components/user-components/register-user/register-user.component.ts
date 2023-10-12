@@ -18,8 +18,7 @@ export class RegisterUserComponent implements OnInit {
     userHomeNumber: new FormControl(),
     userStreetName: new FormControl(),
     userUName: new FormControl(),
-    userPassword: new FormControl(),
-    preferredPaymentMethod: new FormControl()
+    userPassword: new FormControl()
   });
   passwordHide = true;
   /* Upon contruction, injects via dependecy injection a reference of dialogRef and a userService */
@@ -36,7 +35,7 @@ export class RegisterUserComponent implements OnInit {
   /* Upon submit of the registration form, it creates a new client with the formcontrol values and calls for the method addNewClient from the service userService */
   addNewUser(){
     const newClient = this.createClient();
-    console.log(this.userService.addNewClient(newClient));
+    this.userService.addNewClient(newClient)
   }
 
   /* This method returns a new client from the registration form values. The client registered by a new non-registered user on the website begins with a debt of zero. */
@@ -49,7 +48,6 @@ export class RegisterUserComponent implements OnInit {
       this.clientForm.get('userUName')?.value,
       this.clientForm.get('userPassword')?.value,
       "Client",
-      this.clientForm.get('preferredPaymentMethod')?.value,
       false,
       0
     );

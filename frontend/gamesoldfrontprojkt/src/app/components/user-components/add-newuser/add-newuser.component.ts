@@ -23,7 +23,6 @@ export class AddNewuserComponent implements OnInit {
     userUName: new FormControl(),
     userType: new FormControl(),
     userPassword: new FormControl(),
-    preferredPaymentMethod: new FormControl(),
     clientIsBlacklisted: new FormControl(),
     clientDebt: new FormControl(),
     jobRole: new FormControl(),
@@ -81,9 +80,8 @@ export class AddNewuserComponent implements OnInit {
       this.userForm.get('userUName')?.value,
       this.userForm.get('userPassword')?.value,
       "Client",
-      this.userForm.get('preferredPaymentMethod')?.value,
       this.userForm.get('clientIsBlacklisted')?.value,
-      this.userForm.get('clientDebt')?.value
+      this.userForm.get('clientDebt')?.value,
     );
     return newClient;
   }

@@ -11,18 +11,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
+/* This class represents the User on our model. */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,6 +30,7 @@ import lombok.ToString;
 @ToString
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "user_type")
+/* Implements Spring Security's UserDetails, represents the User to be authenticated on our application */
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,8 +43,12 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String username;
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRoles role;
 
+    /* Return specific Spring Security's roles based on USER role. If the user is an admin, return a list of roles containing role_admn and role_user, if not returns a list containing
+     * only the role_user
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.role == UserRoles.ADMIN){
@@ -52,6 +57,8 @@ public class User implements UserDetails {
             return List.of(new SimpleGrantedAuthority("ROLE_USER"));
         }
     }
+
+    /* None of the methods below are implemented */
     @Override
     public boolean isAccountNonExpired() {
         return true;

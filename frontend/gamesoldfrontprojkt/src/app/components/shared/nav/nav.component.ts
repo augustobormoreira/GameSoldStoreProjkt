@@ -9,6 +9,7 @@ import { RegisterUserComponent } from '../../user-components/register-user/regis
 import { LoginService } from 'src/app/service/login.service';
 import { RegisterUserCardComponent } from '../../user-components/register-user-card/register-user-card.component';
 import { TokenInfo } from 'src/app/service/tokeninfo';
+import { EditProfileComponent } from '../../user-components/edit-profile/edit-profile.component';
 /**
  * This is the navbar component that will be displayed during all times when a user of type client is logged in, or when the website is loaded without any user logged in.
  */
@@ -44,6 +45,12 @@ export class NavComponent implements OnInit {
         dialogConfig.height = '800px';
         dialogConfig.width = '1000px';
         const dialogRef = this.dialog.open(RegisterUserCardComponent, dialogConfig);
+      } else if(modalName === 'edit-profile'){
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.id = 'modal-editprofile';
+        dialogConfig.height = '800px';
+        dialogConfig.width = '1000px';
+        const dialogRef = this.dialog.open(EditProfileComponent, dialogConfig);
       }
 
     }
@@ -52,7 +59,9 @@ export class NavComponent implements OnInit {
     /* Upon initialization of the component, we use the method getProductList from the cartService to check the ammount of products already added into the cart
     and also subscribe to the cartItemRemovedTriggerEvent from the cartService service to always keep the correct number of products into the cart being displayed. */
   ngOnInit(): void {
-    this.userName = this.tokenInfo.decodeJWT().sub;
+    if(this.tokenInfo.decodeJWT() != null){
+      this.userName = this.tokenInfo.decodeJWT().sub;
+    }
     this.cartService.getProductList()
       .subscribe(res => {
         this.totalCartItems = res.length;

@@ -1,13 +1,11 @@
 package gamesoldstoreprojkt.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gamesoldstoreprojkt.Model.Card;
-import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.User;
 import gamesoldstoreprojkt.repository.CardRepository;
 
@@ -42,7 +40,7 @@ public class CardService {
     }
 
    public List<Card> getCardsByOwnerName(String userName){
-    User clientOwner = this.userService.findByClientusername(userName).get();
+    User clientOwner = this.userService.findByUserusername(userName).get();
     List<Card> cards = this.cardRepository.findCardBycard_owner_identification_number(clientOwner.getIdentificationNumber());
     return cards;
     }

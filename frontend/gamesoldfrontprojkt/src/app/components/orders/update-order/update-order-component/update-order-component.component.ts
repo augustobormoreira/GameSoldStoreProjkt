@@ -54,8 +54,10 @@ export class UpdateOrderComponentComponent implements OnInit {
         if(order){
           resolve(order);
         }else{
-          reject("Failure in finding Order");
+          reject("Failure in finding order.");
         }
+      }, error => {
+        alert(error.error.message);
       })
     })
   }

@@ -1,12 +1,14 @@
 package gamesoldstoreprojkt.Controller;
 
 import java.io.ByteArrayInputStream;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import javax.print.attribute.standard.Media;
 
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,13 +23,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import gamesoldstoreprojkt.Exceptions.UserAlreadyExistsInDatabaseException;
+import gamesoldstoreprojkt.Exceptions.UserDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.Employee;
 import gamesoldstoreprojkt.Model.User;
 import gamesoldstoreprojkt.Model.UserRoles;
 import gamesoldstoreprojkt.service.DatabasePDFService;
 import gamesoldstoreprojkt.service.UserService;
-import io.micrometer.core.ipc.http.HttpSender.Response;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -68,7 +71,7 @@ public class UserController {
 
 
     @PostMapping("/addClient")
-    public ResponseEntity<Client> addNewClient(@RequestBody Client client){
+    public ResponseEntity<Client> addNewClient(@RequestBody Client client) throws UserAlreadyExistsInDatabaseException{
         String password = new BCryptPasswordEncoder().encode(client.getPassword());
         client.setRole(UserRoles.USER);
         client.setPassword(password);
@@ -78,7 +81,8 @@ public class UserController {
     }
 
     @PostMapping("/addEmployee")
-    public ResponseEntity<Employee> addNewEmployee(@RequestBody Employee employee){
+    public ResponseEntity<Employee> addNewEmployee(@RequestBody Employee employee) throws UserAlreadyExistsInDatabaseException{
+
         String password = new BCryptPasswordEncoder().encode(employee.getPassword());
         employee.setPassword(password);
         employee.setRole(UserRoles.ADMIN);
@@ -87,41 +91,38 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<User>> findUserById(@PathVariable("id") String identificationNumber){
-        Optional<User> newUser = this.userService.findUserById(identificationNumber);
-        return new ResponseEntity<>(newUser, HttpStatus.OK); 
+    public ResponseEntity<User> findUserById(@PathVariable("id") String identificationNumber) throws UserDoesNotExistInDatabaseException{
+        User newUser = this.userService.findUserById(identificationNumber);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
+        
     }
 
     @DeleteMapping("/deleteUser/{id}")
-    public ResponseEntity<User> deleteUserById(@PathVariable("id") String id ) throws Exception{
+    public ResponseEntity<User> deleteUserById(@PathVariable("id") String id ) throws UserDoesNotExistInDatabaseException{
         User newUser = this.userService.removeUserById(id);
-        if(newUser != null){
-            return new ResponseEntity<>(newUser, HttpStatus.OK);
-        }else{
-            throw new Exception();
-        }
-
+        return new ResponseEntity<>(newUser, HttpStatus.OK);        
     }
 
     @PutMapping("/updateClient/{id}")
-    public ResponseEntity<Client> updateClientByCpf(@PathVariable("id") String id, @RequestBody Client updatedClient) throws Exception{
+    public ResponseEntity<Client> updateClientByCpf(@PathVariable("id") String id, @RequestBody Client updatedClient) throws UserDoesNotExistInDatabaseException, UserAlreadyExistsInDatabaseException{
         String password = new BCryptPasswordEncoder().encode(updatedClient.getPassword());
         updatedClient.setPassword(password);
-        Optional<User> clientToUpdate = this.userService.findUserById(id);
-        ((Client) clientToUpdate.get()).setToUpdatedValues(updatedClient);
-        Client newClient = (Client) this.userService.addUser(clientToUpdate.get());
+        User clientToUpdate = this.userService.findUserById(id);
+        ((Client) clientToUpdate).setToUpdatedValues(updatedClient);
+        Client newClient = (Client) this.userService.addUser(clientToUpdate);
         return new ResponseEntity<>(newClient, HttpStatus.OK);
        
     }
 
     @PutMapping("/updateEmployee/{id}")
-    public ResponseEntity<Employee> updateEmployeeByCpf(@PathVariable("id") String id, @RequestBody Employee updatedEmployee) throws Exception{
+    public ResponseEntity<Employee> updateEmployeeByCpf(@PathVariable("id") String id, @RequestBody Employee updatedEmployee) throws UserDoesNotExistInDatabaseException, UserAlreadyExistsInDatabaseException{
         String password = new BCryptPasswordEncoder().encode(updatedEmployee.getPassword());
         updatedEmployee.setPassword(password);
-        Optional<User> employeeToUpdate = this.userService.findUserById(id);
-        ( (Employee) employeeToUpdate.get()).setToUpdatedValues(updatedEmployee);
-        Employee newEmployee = (Employee) this.userService.addUser(employeeToUpdate.get());
+        User employeeToUpdate = this.userService.findUserById(id);
+        ( (Employee) employeeToUpdate).setToUpdatedValues(updatedEmployee);
+        Employee newEmployee = (Employee) this.userService.addUser(employeeToUpdate);
         return new ResponseEntity<>(newEmployee, HttpStatus.OK);
+      
     }
 
 }
