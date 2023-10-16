@@ -1,6 +1,6 @@
 package gamesoldstoreprojkt.builder;
 
-import gamesoldstoreprojkt.Model.GameProductDTO;
+import gamesoldstoreprojkt.Model.DTOModels.GameProductDTO;
 import lombok.Builder;
 
 @Builder

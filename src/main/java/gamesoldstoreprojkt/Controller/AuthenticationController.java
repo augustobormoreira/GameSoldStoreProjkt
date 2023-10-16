@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import gamesoldstoreprojkt.Model.AuthenticationDTO;
-import gamesoldstoreprojkt.Model.LoginResponseDTO;
 import gamesoldstoreprojkt.Model.User;
+import gamesoldstoreprojkt.Model.DTOModels.AuthenticationDTO;
+import gamesoldstoreprojkt.Model.DTOModels.LoginResponseDTO;
 import gamesoldstoreprojkt.service.TokenService;
 import jakarta.validation.Valid;
 import lombok.var;

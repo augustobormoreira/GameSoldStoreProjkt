@@ -1,4 +1,4 @@
-package gamesoldstoreprojkt.Model;
+package gamesoldstoreprojkt.Model.DTOModels;
 
 import java.util.Date;
 

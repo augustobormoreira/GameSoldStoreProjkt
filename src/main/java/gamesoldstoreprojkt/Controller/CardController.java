@@ -18,8 +18,8 @@ import gamesoldstoreprojkt.Exceptions.CardExceptions.CardAlreadyExistsInDatabase
 import gamesoldstoreprojkt.Exceptions.CardExceptions.CardDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Exceptions.UserExceptions.UserDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.Card;
-import gamesoldstoreprojkt.Model.CardDTO;
 import gamesoldstoreprojkt.Model.User;
+import gamesoldstoreprojkt.Model.DTOModels.CardDTO;
 import gamesoldstoreprojkt.service.CardService;
 import gamesoldstoreprojkt.service.UserService;
 /* Rest controller responsible for operations for all crud operations on Cards. */

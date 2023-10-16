@@ -2,12 +2,12 @@ package gamesoldstoreprojkt.Model;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-
 @Data
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
 @Entity
 @DiscriminatorValue("Employee")
 public class Employee extends User { 

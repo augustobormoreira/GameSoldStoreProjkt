@@ -12,7 +12,7 @@ import gamesoldstoreprojkt.Exceptions.OrderExceptions.OrderAlreadyExistsInDataba
 import gamesoldstoreprojkt.Exceptions.OrderExceptions.OrderDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.Order;
-import gamesoldstoreprojkt.Model.OrderDTO;
+import gamesoldstoreprojkt.Model.DTOModels.OrderDTO;
 import gamesoldstoreprojkt.repository.OrderRepository;
 /* This service is responsible for all Order crud methods. */
 @Service

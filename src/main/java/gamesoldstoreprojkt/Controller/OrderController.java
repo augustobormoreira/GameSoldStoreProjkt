@@ -10,8 +10,8 @@ import gamesoldstoreprojkt.Exceptions.UserExceptions.UserDoesNotExistInDatabaseE
 import gamesoldstoreprojkt.Model.Client;
 import gamesoldstoreprojkt.Model.GameProduct;
 import gamesoldstoreprojkt.Model.Order;
-import gamesoldstoreprojkt.Model.OrderDTO;
 import gamesoldstoreprojkt.Model.User;
+import gamesoldstoreprojkt.Model.DTOModels.OrderDTO;
 import gamesoldstoreprojkt.service.DatabasePDFService;
 import gamesoldstoreprojkt.service.GameProductService;
 import gamesoldstoreprojkt.service.OrderService;

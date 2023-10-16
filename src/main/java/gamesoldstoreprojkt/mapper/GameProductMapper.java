@@ -3,7 +3,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import gamesoldstoreprojkt.Model.GameProduct;
-import gamesoldstoreprojkt.Model.GameProductDTO;
+import gamesoldstoreprojkt.Model.DTOModels.GameProductDTO;
 
 
 @Mapper

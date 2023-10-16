@@ -12,7 +12,7 @@ import gamesoldstoreprojkt.Exceptions.OrderExceptions.OrderAlreadyExistsInDataba
 import gamesoldstoreprojkt.Exceptions.OrderExceptions.OrderDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Exceptions.UserExceptions.UserAlreadyExistsInDatabaseException;
 import gamesoldstoreprojkt.Exceptions.UserExceptions.UserDoesNotExistInDatabaseException;
-import gamesoldstoreprojkt.Model.ExceptionDTO;
+import gamesoldstoreprojkt.Model.DTOModels.ExceptionDTO;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {

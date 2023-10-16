@@ -8,7 +8,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -17,6 +16,7 @@ import java.util.Optional;
 
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import gamesoldstoreprojkt.Exceptions.GameExceptions.GameAlreadyExistsInDatabaseException;
 import gamesoldstoreprojkt.Exceptions.GameExceptions.GameDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.GameProduct;
-import gamesoldstoreprojkt.Model.GameProductDTO;
+import gamesoldstoreprojkt.Model.DTOModels.GameProductDTO;
 import gamesoldstoreprojkt.builder.GameProductDTOBuilder;
 import gamesoldstoreprojkt.mapper.GameProductMapper;
 import gamesoldstoreprojkt.repository.GameProductRepository;
@@ -50,11 +50,9 @@ public class GameProductServiceTest {
         gameToBeAdded = gameProductMapper.toModel(gameProductDTO);
     }
 
-    
-
-
 
     @Test
+    @DisplayName("When given a new game, should successfully save it into the database")
     public void whenGameInformedThenNewGameMustBeCreated() throws GameAlreadyExistsInDatabaseException{
         //when
         when( productRepository.save(gameToBeAdded)).thenReturn(gameToBeAdded);
@@ -67,6 +65,7 @@ public class GameProductServiceTest {
     }
 
     @Test
+    @DisplayName("When given ID should get game successfully from database")
     public void whenGameIdInformedThenExistingGameMustBeFound() throws GameDoesNotExistInDatabaseException {
         //when
         when(productRepository.findById(gameProductDTO.getProductId())).thenReturn(Optional.of(gameToBeAdded));
@@ -78,6 +77,7 @@ public class GameProductServiceTest {
     }
 
     @Test
+    @DisplayName("Should return successfully a list of every game in the database")
     public void whenGetProductsCalledThenMustReturnAListOfAllProducts(){
         //when
         when(productRepository.findAll()).thenReturn(Collections.singletonList(gameToBeAdded));
@@ -90,6 +90,7 @@ public class GameProductServiceTest {
     }
 
     @Test
+    @DisplayName("When given ID for deletion, must verify if game exists in database, then deleted")
     public void whenIdInformedForDeletionGameMustBeLookedForInDatabaseThenDeleted() throws GameDoesNotExistInDatabaseException{
         //when
         when(productRepository.findById(gameProductDTO.getProductId())).thenReturn(Optional.of(gameToBeAdded));
@@ -103,4 +104,37 @@ public class GameProductServiceTest {
         assertThat(gameToBeDeleted.getProductId(), is(equalTo(gameProductDTO.getProductId())));
         verify(productRepository).delete(gameDeleted);
     }
+
+    @Test
+    @DisplayName("When trying to add an already existing game in the database, throw exception")
+    public void whenGameAlreadyInDatabaseInformedThenThrowGameAlreadyExistsInDatabaseException() throws GameAlreadyExistsInDatabaseException{
+        //when
+        when(productService.addProduct(gameToBeAdded)).thenThrow(
+            new GameAlreadyExistsInDatabaseException("Game with ID:" + gameToBeAdded.getProductId() + " already exists in database!")
+        );
+
+        final GameAlreadyExistsInDatabaseException exception = assertThrows(GameAlreadyExistsInDatabaseException.class, () -> {
+            productService.addProduct(gameToBeAdded);
+        });
+
+        //then
+        assertEquals("Game with ID:" + gameToBeAdded.getProductId() + " already exists in database!", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("When ID is not valid, throw exception")
+    public void whenGameIdInformedDoesNotExistInDatabaseThrowGameDoesNotExistInDatabaseException() throws GameDoesNotExistInDatabaseException{
+        //when
+        when(productRepository.findById(gameProductDTO.getProductId())).thenThrow(
+            new GameDoesNotExistInDatabaseException("Game with ID: " + Long.toString(gameProductDTO.getProductId()) + " does not exist in database.")
+        );
+
+        //then
+        final GameDoesNotExistInDatabaseException exception = assertThrows(GameDoesNotExistInDatabaseException.class, () -> {
+            productService.getProductById(gameProductDTO.getProductId());
+        });
+        assertEquals("Game with ID: " + Long.toString(gameProductDTO.getProductId()) + " does not exist in database.", exception.getMessage());
+    }
+
+
 }

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import gamesoldstoreprojkt.Model.Client;
@@ -21,12 +22,12 @@ public interface UserRepository extends JpaRepository<User, String>  {
     @Query("from Client")
     List<Client> findAllClient();
 
-    @Query("from Client")
-    Optional<List<Client>> findClientById(Long id);
+    @Query(value = "select * from user where identification_number= :id", nativeQuery=true)
+    Optional<Client> findClientById(@Param("id") Long id);
 
     @Query("from Employee")
     List<Employee> findAllEmployee();
 
-    @Query("from Employee")
-    Optional<Employee> findEmployeeById(Long id);
+    @Query(value = "select * from user where identification_number= :id", nativeQuery=true)
+    Optional<Employee> findEmployeeById(@Param("id") Long id);
 }
