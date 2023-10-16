@@ -21,9 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import gamesoldstoreprojkt.Exceptions.CardExceptions.CardAlreadyExistsInDatabaseException;
 import gamesoldstoreprojkt.Exceptions.CardExceptions.CardDoesNotExistInDatabaseException;
 import gamesoldstoreprojkt.Model.Card;
-import gamesoldstoreprojkt.Model.DTOModels.CardDTO;
 import gamesoldstoreprojkt.builder.CardBuilder;
-import gamesoldstoreprojkt.mapper.CardMapper;
 import gamesoldstoreprojkt.repository.CardRepository;
 
 @ExtendWith(MockitoExtension.class)

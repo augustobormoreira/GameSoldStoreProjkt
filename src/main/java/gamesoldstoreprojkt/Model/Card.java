@@ -24,6 +24,7 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @Column(unique = true)
     private String cardNumber;
     @ManyToOne
     private User cardOwner;
