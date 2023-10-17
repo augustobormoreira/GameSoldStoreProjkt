@@ -7,6 +7,8 @@ import { Card } from '../model/Card';
 import { CardService } from 'src/app/service/card.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { TokenInfo } from 'src/app/service/tokeninfo';
+import { UserService } from 'src/app/service/user.service';
+import { User } from '../model/User';
 
 
 /**
@@ -36,8 +38,8 @@ export class CartComponent implements OnInit {
     }
   );
 
-  /* Upon construction, receive a cartService, cardService and tokenInfo via dependency injection */
-  constructor(private cartService: CartserviceService, private cardService: CardService, private tokenInfo: TokenInfo) { }
+  /* Upon construction, receive a cartService, userService, cardService and tokenInfo via dependency injection */
+  constructor(private cartService: CartserviceService, private cardService: CardService, private tokenInfo: TokenInfo, private userService: UserService) { }
 
 
   /* On component initialization we use the cartService to get all products that are on the productList, this means all products selected by the user on the product-list
@@ -65,7 +67,15 @@ export class CartComponent implements OnInit {
 
   /* After purchase confirmation this method is called to open the card form and give the user options to choose from his payment methods */
   finalizeCartPhase(){
-    this.openFormToGetCardInformation();
+    let clientId = this.tokenInfo.decodeJWT().userIdAndRole[0];
+    this.userService.getClientById(clientId).subscribe((user) => {
+      if(user.clientDebt!=0){
+        let messageAlert: string = "Client cannot make any purchases due to " + user.clientDebt + " debt!"; 
+        alert(messageAlert);
+      }else{
+        this.openFormToGetCardInformation();
+      }
+    });
   }
 
   /* This method uses the current productList array of products to generate a new string array containing all products ids */
@@ -79,9 +89,14 @@ export class CartComponent implements OnInit {
 
   /* Opens the card form and gets all cards the user has registered. */
   openFormToGetCardInformation(){
-    this.cardFormMustOpen = true;
     this.cardService.getAllCardsByClientUserName(this.tokenInfo.decodeJWT().sub).subscribe((data) => {
-      this.card = data;
+      if(data.length==0){
+        alert("Client does not possess any payment methods, must register one first.");
+      }
+      else{
+        this.cardFormMustOpen = true;
+        this.card = data;
+      }
     });    
   }
 

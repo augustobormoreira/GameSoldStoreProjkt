@@ -21,6 +21,11 @@ export class UserService {
         
     }
 
+    /* Method looks for user specified as a client in database by ID, return an observable  */
+    getClientById(id: String): Observable<UserClient>{
+        return this.httpClient.get<UserClient>(`${environment.API_URL}/users/${id}`);
+    }
+
     /* This method gets all the users on the database and returns it as an observable */
     getAllUsers() {
         return this.httpClient.get(`${environment.API_URL}/users/allUsers`);
